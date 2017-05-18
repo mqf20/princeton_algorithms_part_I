@@ -1,4 +1,4 @@
-package dynamicConnectivity;
+package dynamicconnectivity;
 
 /**
  * This is a parent class for Union-Find algorithms to inherit.

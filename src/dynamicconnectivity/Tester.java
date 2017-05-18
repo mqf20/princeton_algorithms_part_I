@@ -1,4 +1,4 @@
-package dynamicConnectivity;
+package dynamicconnectivity;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

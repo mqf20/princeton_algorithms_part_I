@@ -1,4 +1,4 @@
-package dynamicConnectivity;
+package dynamicconnectivity;
 
 /**
  * This class implements the Weighted Quick Union algorithm explained in Week 1 that makes these 
