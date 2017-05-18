@@ -1,10 +1,8 @@
 package dynamicconnectivity;
 
 /**
- * This class implements the Quick Find algorithm explained in Week 1.
- * 
- * From Week 1, Coursera Algorithms, Part I
- * (https://class.coursera.org/algs4partI-010)
+ * This class implements the Quick Find algorithm explained in Week 1. From Week 1, Coursera
+ * Algorithms, Part I (https://class.coursera.org/algs4partI-010).
  * 
  * @author Ming
  *

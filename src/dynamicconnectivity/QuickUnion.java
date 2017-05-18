@@ -1,25 +1,20 @@
 package dynamicconnectivity;
 
 /**
- * This class implements the Quick Union algorithm explained in Week 1.
- * 
- * From Week 1, Coursera Algorithms, Part I
- * (https://class.coursera.org/algs4partI-010)
+ * This class implements the Quick Union algorithm explained in Week 1. From Week 1, Coursera
+ * Algorithms, Part I (https://class.coursera.org/algs4partI-010).
  * 
  * @author Ming
  *
  */
 public class QuickUnion extends UnionFind {
 
-  public QuickUnion(int N) {
-    super(N);
+  public QuickUnion(int n) {
+    super(n);
   }
 
   /**
-   * Chase parent pointers until root is reached
-   * 
-   * @param node
-   * @return root of node
+   * Chase parent pointers until root is reached.
    */
   public int findRoot(int node) {
     int parent = id[node];
@@ -36,17 +31,14 @@ public class QuickUnion extends UnionFind {
   }
 
   /**
-   * Change root of p to root of q
-   * 
-   * @param p
-   * @param q
+   * Change root of p to root of q.
    */
   @Override
   public void union(int p, int q) {
-    int pRoot = findRoot(p);
-    int qRoot = findRoot(q);
-    if (pRoot != qRoot) {
-      id[pRoot] = qRoot;
+    int rootP = findRoot(p);
+    int rootQ = findRoot(q);
+    if (rootP != rootQ) {
+      id[rootP] = rootQ;
     }
   }
 
