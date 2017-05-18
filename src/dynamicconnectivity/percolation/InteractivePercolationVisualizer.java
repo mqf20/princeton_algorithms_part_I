@@ -17,18 +17,23 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class InteractivePercolationVisualizer {
 
+  /**
+   * Run percolation visualizer animation.
+   */
   public static void main(String[] args) {
+
     // N-by-N percolation system (read from command-line, default = 6)
-    int N = 6;
-    if (args.length == 1)
-      N = Integer.parseInt(args[0]);
+    int n = 6;
+    if (args.length == 1) {
+      n = Integer.parseInt(args[0]);
+    }
 
     // repeatedly open site specified my mouse click and draw resulting system
-    StdOut.println(N);
+    StdOut.println(n);
 
     StdDraw.show(0);
-    Percolation perc = new Percolation(N);
-    PercolationVisualizer.draw(perc, N);
+    Percolation perc = new Percolation(n);
+    PercolationVisualizer.draw(perc, n);
     StdDraw.show(0);
 
     while (true) {
@@ -41,11 +46,11 @@ public class InteractivePercolationVisualizer {
         double y = StdDraw.mouseY();
 
         // convert to row i, column j
-        int i = (int) (N - Math.floor(y));
+        int i = (int) (n - Math.floor(y));
         int j = (int) (1 + Math.floor(x));
 
         // open site (i, j) provided it's in bounds
-        if (i >= 1 && i <= N && j >= 1 && j <= N) {
+        if (i >= 1 && i <= n && j >= 1 && j <= n) {
           if (!perc.isOpen(i, j)) {
             StdOut.println(i + " " + j);
           }
@@ -54,7 +59,7 @@ public class InteractivePercolationVisualizer {
 
         // draw N-by-N percolation system
         StdDraw.show(0);
-        PercolationVisualizer.draw(perc, N);
+        PercolationVisualizer.draw(perc, n);
       }
       StdDraw.show(20);
     }

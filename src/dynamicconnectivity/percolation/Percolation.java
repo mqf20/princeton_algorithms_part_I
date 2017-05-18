@@ -6,19 +6,14 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 /**
  * Percolation class from programming assignment 1 of Coursera Algorithms, Part I
- * (https://class.coursera.org/algs4partI-010).
+ * (https://class.coursera.org/algs4partI-010). Refer to:
  * 
- * See assignment specification http://coursera.cs.princeton.edu/algs4/assignments/percolation.html
- * and checklist http://coursera.cs.princeton.edu/algs4/checklists/percolation.html
- * 
- * Style guide from http://introcs.cs.princeton.edu/java/11style/
- * 
- * Relies on packages from algs4.jar, in particular WeightedQuickUnionUF
- * http://algs4.cs.princeton.edu/code/javadoc/edu/princeton/cs/algs4/ WeightedQuickUnionUF.html
- * 
- * Complete JavaDoc for edu.princeton.cs.algs4 at http://algs4.cs.princeton.edu/code/javadoc/
- * 
- * @author Foo, Ming Qing (December 2016)
+ * <ul>
+ * <li>assignment specification
+ * http://coursera.cs.princeton.edu/algs4/assignments/percolation.html</li>
+ * <li>checklist http://coursera.cs.princeton.edu/algs4/checklists/percolation.html</li>
+ * <li>packages from algs4.jar http://algs4.cs.princeton.edu/code/javadoc/</li>
+ * </ul>
  *
  */
 public class Percolation {
@@ -51,8 +46,6 @@ public class Percolation {
 
   /**
    * Constructor.
-   * 
-   * @param n
    */
   public Percolation(int n) {
 
