@@ -24,7 +24,7 @@ public class QuickFind extends UnionFind {
     int qid = id[q];
     if (pid != qid) {
       // Only union if p and q are not already connected
-      for (int i = 0; i < N; i++) {
+      for (int i = 0; i < numNodes; i++) {
         if (id[i] == pid) {
           id[i] = qid;
         }
