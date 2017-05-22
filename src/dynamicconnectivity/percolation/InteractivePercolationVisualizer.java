@@ -23,7 +23,7 @@ public class InteractivePercolationVisualizer {
   public static void main(String[] args) {
 
     // N-by-N percolation system (read from command-line, default = 6)
-    int n = 6;
+    int n = 10;
     if (args.length == 1) {
       n = Integer.parseInt(args[0]);
     }
