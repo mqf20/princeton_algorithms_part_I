@@ -29,9 +29,7 @@ public class FastCollinearPoints {
    * Variables
    */
   private final int n;
-  private List<Point[]> collinearPointsList = new ArrayList<Point[]>();
-  // all points on all detected line segments, duplicates included
-  private List<Point[]> pointsPairsList = new ArrayList<Point[]>();
+  private int numberOfSegments = 0;
   // two end points on all detected line segments, duplicates included
   private LineSegment[] segments;
 
@@ -50,7 +48,7 @@ public class FastCollinearPoints {
 
     Point[] pointsSortedByNaturalOrder = new Point[n]; // clone of points to be sorted in natural
                                                        // (coordinate) order
-    
+
     for (int i = 0; i < n; i++) {
       if (points[i] == null) {
         throw new NullPointerException();
@@ -79,15 +77,14 @@ public class FastCollinearPoints {
 
     // ----- [] Loop through every point as reference point
 
-    int collinearCount; // Number of entries in pointsSlope[] that have equal slopes
-    Point referencePoint = null; // referencePointrent point being inspected -- reference point
     double[] slopes = new double[n]; // array for storing slopes relative to reference point
-    Point[] candidatePoints; // array for temporarily storing collinear points
+    // all points on all detected line segments, duplicates included
+    List<Point[]> pointsPairsList = new ArrayList<Point[]>();
 
     for (int i = 0; i < n; i++) {
 
-      collinearCount = 2; // reset
-      referencePoint = pointsSortedByNaturalOrder[i]; // change reference point
+      int collinearCount = 2; // Number of entries in pointsSlope[] that have equal slopes
+      Point referencePoint = pointsSortedByNaturalOrder[i]; // change reference point
 
       MergeX.sort(pointsSortedBySlopeOrder, referencePoint.slopeOrder()); // sort by slope order
 
@@ -111,13 +108,12 @@ public class FastCollinearPoints {
 
           if (collinearCount >= COLLINEAR_THRESHOLD) {
 
-            candidatePoints = new Point[collinearCount];
+            Point[] candidatePoints = new Point[collinearCount];
             candidatePoints[0] = referencePoint;
             for (int k = 1; k < collinearCount; k++) {
               candidatePoints[k] = pointsSortedBySlopeOrder[j - k];
             }
-            MergeX.sort(candidatePoints);
-            collinearPointsList.add(candidatePoints);
+            pointsPairsList.add(extractEndPoints(candidatePoints));
 
           }
 
@@ -130,33 +126,29 @@ public class FastCollinearPoints {
 
       if (collinearCount >= COLLINEAR_THRESHOLD) {
 
-        candidatePoints = new Point[collinearCount];
+        Point[] candidatePoints = new Point[collinearCount];
         candidatePoints[0] = referencePoint;
         for (int k = 1; k < collinearCount; k++) {
           candidatePoints[k] = pointsSortedBySlopeOrder[n - k];
         }
-        MergeX.sort(candidatePoints);
-        collinearPointsList.add(candidatePoints);
+        pointsPairsList.add(extractEndPoints(candidatePoints));
 
       }
 
     }
 
-    // ----- [] Extract end points of collinear segments
+    // ----- [] Filter pointsPairsList to remove duplicates
 
-    Point x; // one end of line segment
-    Point y; // the other end of line segment
-    boolean duplicated;
+    List<Point[]> filteredPointsPairsList = new ArrayList<Point[]>();
 
-    for (int i = 0; i < collinearPointsList.size(); i++) {
+    for (int i = 0; i < pointsPairsList.size(); i++) {
 
-      duplicated = false;
-      x = collinearPointsList.get(i)[0]; // first point of line segment
-      y = collinearPointsList.get(i)[collinearPointsList.get(i).length - 1]; // last point of line
-                                                                             // segment
+      boolean duplicated = false;
+      Point x = pointsPairsList.get(i)[0]; // first point of line segment
+      Point y = pointsPairsList.get(i)[1]; // last point of line segment
 
-      for (Point[] pointsPair : pointsPairsList) {
-        if (contains(pointsPair, x) && contains(pointsPair, y)) {
+      for (Point[] filteredPointsPair : filteredPointsPairsList) {
+        if (filteredPointsPair[0].compareTo(x) == 0 && filteredPointsPair[1].compareTo(y) == 0) {
           duplicated = true;
           break;
         }
@@ -165,18 +157,43 @@ public class FastCollinearPoints {
       // ----- [] Save pair of points if not duplicated
 
       if (!duplicated) {
-        pointsPairsList.add(new Point[] { x, y }); // store pairs of points
+        filteredPointsPairsList.add(pointsPairsList.get(i));
+        numberOfSegments++;
       }
 
     }
 
     // ----- [] Process results into LineSegment objects
 
-    segments = new LineSegment[numberOfSegments()];
+    segments = new LineSegment[numberOfSegments];
 
-    for (int i = 0; i < numberOfSegments(); i++) {
-      segments[i] = new LineSegment(pointsPairsList.get(i)[0], pointsPairsList.get(i)[1]);
+    for (int i = 0; i < numberOfSegments; i++) {
+      segments[i] = new LineSegment(filteredPointsPairsList.get(i)[0],
+          filteredPointsPairsList.get(i)[1]);
     }
+
+  }
+
+  /**
+   * Extract the end points of an array of <tt>Point</tt> and return them as a pair, in natural
+   * order.
+   */
+  private Point[] extractEndPoints(Point[] candidatePoints) {
+
+    Point startPoint = candidatePoints[0];
+    Point endPoint = candidatePoints[0];
+
+    for (Point point : candidatePoints) {
+
+      if (point.compareTo(startPoint) < 0) {
+        startPoint = point;
+      } else if (point.compareTo(endPoint) > 0) {
+        endPoint = point;
+      }
+
+    }
+
+    return new Point[] { startPoint, endPoint };
 
   }
 
@@ -184,7 +201,7 @@ public class FastCollinearPoints {
    * Returns the number of line segments found.
    */
   public int numberOfSegments() {
-    return pointsPairsList.size();
+    return numberOfSegments;
   }
 
   /**
@@ -202,18 +219,6 @@ public class FastCollinearPoints {
 
     return segmentsCopy;
 
-  }
-
-  /**
-   * Returns true if Point array contains given Point.
-   */
-  private boolean contains(Point[] points, Point point) {
-    for (Point p : points) {
-      if (p.compareTo(point) == 0) {
-        return true;
-      }
-    }
-    return false;
   }
 
 }

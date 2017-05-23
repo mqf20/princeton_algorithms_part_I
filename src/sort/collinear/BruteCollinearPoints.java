@@ -205,13 +205,13 @@ public class BruteCollinearPoints {
         
         // ----- [] Make a defensive copy
         
-        LineSegment[] segments_copy = new LineSegment[numberOfSegments()];
+        LineSegment[] segmentsCopy = new LineSegment[numberOfSegments()];
         
         for (int i = 0; i < numberOfSegments(); i++) {
-            segments_copy[i] = segments[i];
+            segmentsCopy[i] = segments[i];
         }
         
-        return segments_copy;
+        return segmentsCopy;
         
     }
     

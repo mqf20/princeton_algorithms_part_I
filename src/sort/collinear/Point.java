@@ -259,10 +259,11 @@ public class Point implements Comparable<Point> {
     int bound = 500;
 
     Point[] points = new Point[n];
+    Random random = new Random();
 
     for (int i = 0; i < n; i++) {
-      int x = new Random().nextInt(bound);
-      int y = new Random().nextInt(bound);
+      int x = random.nextInt(bound);
+      int y = random.nextInt(bound);
       points[i] = new Point(x, y);
     }
 
@@ -277,7 +278,7 @@ public class Point implements Comparable<Point> {
 
     // ----- [] Test slope order
 
-    Point reference = points[new Random().nextInt(n)];
+    Point reference = points[random.nextInt(n)];
     double prevSlope = Double.NEGATIVE_INFINITY;
     double curSlope;
     // System.out.println(">> Reference is " + reference);

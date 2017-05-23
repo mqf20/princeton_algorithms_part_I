@@ -13,7 +13,7 @@ public class TestCollinearPoints {
 
     // ----- [] Read points from file (positive points only)
 
-    In in = new In("src/sort/collinear/input10.txt"); // Example
+    In in = new In("src/sort/collinear/input8.txt"); // Example
     int n = in.readInt();
     Point[] points = new Point[n];
 
@@ -29,11 +29,6 @@ public class TestCollinearPoints {
         scale = y;
       }
       points[i] = new Point(x, y);
-    }
-
-    System.out.println(">> Before operations, the points are:");
-    for (Point p : points) {
-      System.out.println(">> " + p);
     }
 
     if (draw) {
@@ -52,8 +47,8 @@ public class TestCollinearPoints {
       Stopwatch stopwatch = new Stopwatch();
       FastCollinearPoints collinear = new FastCollinearPoints(points);
       LineSegment[] segments = collinear.segments();
-      System.out.println(">> it took " + stopwatch.elapsedTime() + " ms to find " + segments.length
-          + " segments:");
+      System.out.println(">> it took " + stopwatch.elapsedTime() + " ms to find "
+          + collinear.numberOfSegments() + " segments:");
       for (LineSegment segment : segments) {
         if (draw) {
           segment.draw();
@@ -62,13 +57,6 @@ public class TestCollinearPoints {
       }
     } catch (Exception e) {
       System.out.println(">> exception caught: " + e.getMessage());
-    }
-
-    // ----- [] Check immutability of points[]
-
-    System.out.println(">> After operations, the points are:");
-    for (Point p : points) {
-      System.out.println(">> " + p);
     }
 
   }
