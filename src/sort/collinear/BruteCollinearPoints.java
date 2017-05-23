@@ -3,9 +3,7 @@ package sort.collinear;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MergeX;
-import edu.princeton.cs.algs4.Stopwatch;
 
 /**
  * BruteCollinearPoints class from programming assignment 3 of Coursera Algorithms, Part I 
@@ -21,9 +19,6 @@ import edu.princeton.cs.algs4.Stopwatch;
  * Style guide from http://introcs.cs.princeton.edu/java/11style/
  * 
  * Complete JavaDoc for edu.princeton.cs.algs4 at http://algs4.cs.princeton.edu/code/javadoc/
- * 
- * @author Ming
- *
  */
 public class BruteCollinearPoints {
     
@@ -236,67 +231,4 @@ public class BruteCollinearPoints {
         return false;
     }
     
-    /**
-     * Demonstration
-     */
-    public static void main(String[] args) {
-        
-        int scale = 0;  // axes scale
-        boolean draw = false;  // don't draw anymore
-
-        // ----- [] Read points from file (positive points only)
-  
-        In in = new In("src/sort/collinear/equidistant.txt");  // Example
-        int n = in.readInt();
-        Point[] points = new Point[n];
-        
-        // ----- [] Scale axes accordingly (top RH quadrant only)
-        
-        for (int i = 0; i < n; i++) {
-            int x = in.readInt();
-            int y = in.readInt();
-            if (x > scale) {
-                scale = x;
-            }
-            if (y > scale) {
-                scale = y;
-            }
-            points[i] = new Point(x, y);
-        }
-
-//        if (draw) {
-//            StdDraw.show(0);
-//            StdDraw.setXscale(0, scale + scale/10);
-//            StdDraw.setYscale(0, scale + scale/10);
-//            for (Point p : points) {
-//                p.draw();
-//            }
-//            StdDraw.show();
-//        }
-
-        // ---- [] Draw line segments
-
-        try {
-
-            Stopwatch stopwatch = new Stopwatch();
-            BruteCollinearPoints collinear = new BruteCollinearPoints(points);
-            
-            System.out.println(">> it took " + stopwatch.elapsedTime() + " ms to find " + collinear.numberOfSegments() + " segments:");
-            LineSegment[] segments = collinear.segments();
-            if (segments == null) {
-                System.out.println(">> error! segments is null");
-            }
-            for (LineSegment segment : segments) {
-//                if (draw) {
-//                    segment.draw();
-//                }
-                System.out.println(segment);
-            }
-
-        } catch (Exception e) {
-            System.out.println(">> Exception caught: " + e.getMessage());
-        }
-
-    }
-
 }
