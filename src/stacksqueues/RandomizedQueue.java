@@ -17,9 +17,6 @@ import edu.princeton.cs.algs4.StdRandom;
  * Style guide from http://introcs.cs.princeton.edu/java/11style/
  * 
  * Complete JavaDoc for edu.princeton.cs.algs4 at http://algs4.cs.princeton.edu/code/javadoc/
- * 
- * @author Ming
- *
  */
 public class RandomizedQueue<Item> implements Iterable<Item> {
 

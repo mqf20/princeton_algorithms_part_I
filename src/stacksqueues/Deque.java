@@ -17,8 +17,6 @@ import java.util.NoSuchElementException;
  * Style guide from http://introcs.cs.princeton.edu/java/11style/
  * 
  * Complete JavaDoc for edu.princeton.cs.algs4 at http://algs4.cs.princeton.edu/code/javadoc/
- * 
- * @author Ming
  *
  */
 public class Deque<Item> implements Iterable<Item> {
@@ -48,8 +46,6 @@ public class Deque<Item> implements Iterable<Item> {
     
     /**
      * Return true if the deque is empty.
-     * 
-     * @return
      */
     public boolean isEmpty() {
         return (firstNode == null);
@@ -57,8 +53,6 @@ public class Deque<Item> implements Iterable<Item> {
    
     /**
      * Return number of items in deque.
-     * 
-     * @return
      */
     public int size() {
        return size;
@@ -66,8 +60,6 @@ public class Deque<Item> implements Iterable<Item> {
 
     /**
      * Joins an item to the front of the queue.
-     *
-     * @param item
      */
     public void addFirst(Item item) {
         if (item == null) {
@@ -90,8 +82,6 @@ public class Deque<Item> implements Iterable<Item> {
    
     /**
      * Join an item onto the back of deque.
-     *
-     * @param item
      */
     public void addLast(Item item) {
         if (item == null) {
@@ -114,8 +104,6 @@ public class Deque<Item> implements Iterable<Item> {
     
     /**
      * Remove the first item from the deque and return it.
-     * 
-     * @return
      */
     public Item removeFirst() {
         if (isEmpty()) {
@@ -134,8 +122,6 @@ public class Deque<Item> implements Iterable<Item> {
    
     /**
      * Remove the last item (i.e., pop the last item) from the deque and return it.
-     * 
-     * @return
      */
     public Item removeLast() {
         if (isEmpty()) {

@@ -21,8 +21,6 @@ import edu.princeton.cs.algs4.StdOut;
  * Style guide from http://introcs.cs.princeton.edu/java/11style/
  * 
  * Complete JavaDoc for edu.princeton.cs.algs4 at http://algs4.cs.princeton.edu/code/javadoc/
- * 
- * @author Ming
  *
  */
 public class Subset {
@@ -32,8 +30,6 @@ public class Subset {
      * using StdIn.readString(); and prints out exactly k of them, uniformly at random. 
      * 
      * Each item from the sequence can be printed out at most once.
-     * 
-     * @param args
      */
     public static void main(String[] args) {
         
