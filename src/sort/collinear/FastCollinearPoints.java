@@ -29,13 +29,10 @@ public class FastCollinearPoints {
    * Variables
    */
   private final int n;
-  private List<Point[]> collinearPointsList = new ArrayList<Point[]>(); // all points on all
-                                                                        // detected line
-                                                                        // segments, duplicates
-                                                                        // included
-  private List<Point[]> pointsPairsList = new ArrayList<Point[]>(); // two end points on all
-                                                                    // detected line
-                                                                    // segments, duplicates included
+  private List<Point[]> collinearPointsList = new ArrayList<Point[]>();
+  // all points on all detected line segments, duplicates included
+  private List<Point[]> pointsPairsList = new ArrayList<Point[]>();
+  // two end points on all detected line segments, duplicates included
   private LineSegment[] segments;
 
   /**
@@ -49,32 +46,35 @@ public class FastCollinearPoints {
 
     n = points.length;
 
-    Point[] myPoints = new Point[n];
+    // ----- [] Copy to new array (to avoid modifying original)
 
-    // ----- [] Copy to new array
-
+    Point[] pointsSortedByNaturalOrder = new Point[n]; // clone of points to be sorted in natural
+                                                       // (coordinate) order
+    
     for (int i = 0; i < n; i++) {
-      myPoints[i] = points[i];
+      if (points[i] == null) {
+        throw new NullPointerException();
+      }
+      pointsSortedByNaturalOrder[i] = points[i];
     }
 
-    MergeX.sort(myPoints); // sort points by y-coordinates, breaking ties with x-coordinates
+    MergeX.sort(pointsSortedByNaturalOrder); // sort points by y-coordinates, breaking ties with
+                                             // x-coordinates
+
+    // ----- [] Validate points to remove repeated points
+    // Also, copy points to another temporary array
 
     Point[] pointsSortedBySlopeOrder = new Point[n]; // temporary array for holding points sorted by
                                                      // slope order
 
-    // ----- [] Validate points to remove null and repeated points
-    // Also, copy points to another temporary array
-
     for (int i = 0; i < n; i++) {
-      if (myPoints[i] == null) {
-        throw new NullPointerException();
-      }
-      if ((i > 0) && (myPoints[i].compareTo(myPoints[i - 1]) == 0)) {
+      if ((i > 0)
+          && (pointsSortedByNaturalOrder[i].compareTo(pointsSortedByNaturalOrder[i - 1]) == 0)) {
         // Repeated point detected
-        // This works because myPoints[] is sorted
+        // This works because pointsSortedByNaturalOrder[] is sorted
         throw new IllegalArgumentException();
       }
-      pointsSortedBySlopeOrder[i] = myPoints[i];
+      pointsSortedBySlopeOrder[i] = pointsSortedByNaturalOrder[i];
     }
 
     // ----- [] Loop through every point as reference point
@@ -87,7 +87,7 @@ public class FastCollinearPoints {
     for (int i = 0; i < n; i++) {
 
       collinearCount = 2; // reset
-      referencePoint = myPoints[i]; // change reference point
+      referencePoint = pointsSortedByNaturalOrder[i]; // change reference point
 
       MergeX.sort(pointsSortedBySlopeOrder, referencePoint.slopeOrder()); // sort by slope order
 
