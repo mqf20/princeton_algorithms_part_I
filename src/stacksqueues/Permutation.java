@@ -23,7 +23,7 @@ import edu.princeton.cs.algs4.StdOut;
  * Complete JavaDoc for edu.princeton.cs.algs4 at http://algs4.cs.princeton.edu/code/javadoc/
  *
  */
-public class Subset {
+public class Permutation {
 
     /**
      * Takes a command-line integer k; reads in a sequence of N strings from standard input
