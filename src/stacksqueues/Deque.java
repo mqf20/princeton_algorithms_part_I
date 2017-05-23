@@ -1,4 +1,4 @@
-package stacksQueues;
+package stacksqueues;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

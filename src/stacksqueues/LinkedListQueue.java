@@ -1,10 +1,10 @@
-package stacksQueues;
+package stacksqueues;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Implement a stack using a linked list. Accommodates generic stacks.
+ * Implement a queue using a linked list. Accommodates generic queues.
  * Supports iterator.
  * 
  * From Week 2, Coursera Algorithms, Part I (https://class.coursera.org/algs4partI-010)
@@ -12,9 +12,10 @@ import java.util.NoSuchElementException;
  * @author ming
  *
  */
-public class LinkedListStack<Item> implements Iterable<Item> {
+public class LinkedListQueue<Item> implements Iterable<Item> {
 	
 	private Node firstNode = null;
+	private Node lastNode = null;
 	
 	private class Node {
 		Item item;
@@ -22,37 +23,46 @@ public class LinkedListStack<Item> implements Iterable<Item> {
 	}
 	
 	/**
-	 * Push an item onto the stack. Null items are allowed.
-	 * 
-	 * @param pushItem
+	 * Join an item onto the back of the queue. Null items are allowed. 
+	 *
+	 * @param item
 	 */
-	public void push(Item pushItem) {
-		Node newFirstNode = new Node();
-		newFirstNode.item = pushItem;
-		newFirstNode.next = firstNode;
-		firstNode = newFirstNode;
+	public void enqueue(Item item) {
+		Node oldLastNode = lastNode;
+		lastNode.item = item;
+		lastNode.next = null;
+		if (isEmpty()) {
+			firstNode = lastNode;
+		} else {
+			oldLastNode.next = lastNode;
+		}
 	}
 	
 	/**
-	 * Pop the last item out of the stack and return it.
+	 * Remove the first item from the queue.
+	 * 
+	 * Returns null if the queue is empty.
 	 * 
 	 * @return
 	 */
-	public Item pop() {
-		Item itemPopped = firstNode.item;
+	public Item dequeue() {
+		Item itemDequeued = firstNode.item;
 		firstNode = firstNode.next;
-		return itemPopped;
+		if (isEmpty()) {
+			lastNode = null;
+		}
+		return itemDequeued;
 	}
 	
 	/**
-	 * Check if the stack is empty.
+	 * Check if the queue is empty.
 	 * 
 	 * @return
 	 */
 	public Boolean isEmpty() {
 		return (firstNode == null);
 	}
-
+	
 	/**
 	 * Necessary for making LinkedListStack an iterator.
 	 * Inherited from java.util.Iterator.
@@ -90,5 +100,5 @@ public class LinkedListStack<Item> implements Iterable<Item> {
 		}
 		
 	}
-	
+
 }

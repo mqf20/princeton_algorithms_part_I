@@ -1,4 +1,4 @@
-package stacksQueues;
+package stacksqueues;
 
 /**
  * Implement a queue of Strings using a linked list.
