@@ -23,9 +23,7 @@ package sort.collinear;
  * Complete JavaDoc for edu.princeton.cs.algs4 at http://algs4.cs.princeton.edu/code/javadoc/
  */
 import java.util.Comparator;
-import java.util.Random;
 
-import edu.princeton.cs.algs4.MergeX;
 import edu.princeton.cs.algs4.StdDraw;
 
 public class Point implements Comparable<Point> {
