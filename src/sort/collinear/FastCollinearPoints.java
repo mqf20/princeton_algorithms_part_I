@@ -16,7 +16,11 @@ import java.util.List;
  * Comments:
  * <ul>
  * <li>Using <tt>Arrays.sort()</tt> is faster than using <tt>MergeX.sort()</tt>.</li>
- * <li>Why can't I get 100%?</tt>
+ * <li>Point.slopeTo(Point) is communicative -- the sequence of points doesn't matter when
+ * computing slope between a pair.</li>
+ * <li>Uses an optimization "trick" that removes duplicate line segments by adding an extra
+ * sort by natural order in the first loop and checking if pMin == referencePoint.</li>
+ * <li><tt>Arrays.sort()</tt> must be stable for this trick to work!</li>
  * </ul>
  */
 public class FastCollinearPoints {
@@ -32,9 +36,8 @@ public class FastCollinearPoints {
    * Variables
    */
   private final int n;
-  private int numberOfSegments = 0;
   // two end points on all detected line segments, duplicates included
-  private LineSegment[] segments;
+  private List<LineSegment> segments = new ArrayList<LineSegment>();
 
   /**
    * Constructor that finds all line segmnets containing 4 or more points.
@@ -81,14 +84,15 @@ public class FastCollinearPoints {
 
     double[] slopes = new double[n]; // array for storing slopes relative to reference point
 
-    // all points on all detected line segments, duplicates included
-    List<Point[]> pointsPairsList = new ArrayList<Point[]>();
-
     for (int i = 0; i < n; i++) {
 
-      int collinearCount = 2; // Number of entries in pointsSlope[] that have equal slopes
       Point referencePoint = pointsSortedByNaturalOrder[i]; // change reference point
 
+      Arrays.sort(pointsSortedBySlopeOrder);  // necessary for optimization "trick" -- points must
+                                              // be sorted by natural order so that duplicates can
+                                              // be identified. Also relies on fact that 
+                                              // Arrays.sort() is stable!
+            
       Arrays.sort(pointsSortedBySlopeOrder, referencePoint.slopeOrder()); // sort by slope order
 
       // ----- [] Compute slopes relative to referencePoint
@@ -96,115 +100,48 @@ public class FastCollinearPoints {
       for (int j = 0; j < n; j++) {
         slopes[j] = referencePoint.slopeTo(pointsSortedBySlopeOrder[j]);
       }
-
-      for (int j = 2; j < n; j++) { // start from the 3rd point
-                                    // slope[0] will always be -Double.NEGATIVE_INFINITY
-
-        if (Math.abs(slopes[j] - slopes[j - 1]) < TOL
-            || (Double.isInfinite(slopes[j]) && Double.isInfinite(slopes[j - 1]))) {
-
-          collinearCount++;
-
-        } else {
-
-          // ----- [] Streak broken
-
-          if (collinearCount >= COLLINEAR_THRESHOLD) {
-
-            Point[] candidatePoints = new Point[collinearCount];
-            candidatePoints[0] = referencePoint;
-            for (int k = 1; k < collinearCount; k++) {
-              candidatePoints[k] = pointsSortedBySlopeOrder[j - k];
-            }
-            pointsPairsList.add(extractEndPoints(candidatePoints));
-
+      
+      int minIndex = 1;  // ignore the first point, because it will be the reference point and 
+                         // slope[0] will always be -Double.NEGATIVE_INFINITY
+      int maxIndex = minIndex + 1;
+      
+      while (minIndex < n) {
+        
+        while (maxIndex < n && (Math.abs(slopes[maxIndex] - slopes[minIndex]) < TOL
+            || (Double.isInfinite(slopes[maxIndex]) && Double.isInfinite(slopes[minIndex])))) {
+          
+          maxIndex++;
+        
+        }
+        
+        if (maxIndex - 1 - minIndex >= COLLINEAR_THRESHOLD - 2) {  
+          // because maxIndex would have overshot by 1
+          
+          Point pMin = referencePoint.compareTo(pointsSortedBySlopeOrder[minIndex]) < 0 
+              ? referencePoint : pointsSortedBySlopeOrder[minIndex];
+          
+          if (pMin == referencePoint) {
+            Point pMax = pointsSortedBySlopeOrder[maxIndex - 1];
+            segments.add(new LineSegment(pMin, pMax));
           }
-
-          collinearCount = 2; // reset
+          
         }
-
+        
+        minIndex = maxIndex;  // move minIndex forward (noting that maxIndex would have overshot 
+                              // by 1)
+        maxIndex = minIndex + 1;
+        
       }
-
-      // ----- [] Check again at the end
-
-      if (collinearCount >= COLLINEAR_THRESHOLD) {
-
-        Point[] candidatePoints = new Point[collinearCount];
-        candidatePoints[0] = referencePoint;
-        for (int k = 1; k < collinearCount; k++) {
-          candidatePoints[k] = pointsSortedBySlopeOrder[n - k];
-        }
-        pointsPairsList.add(extractEndPoints(candidatePoints));
-
-      }
-
+      
     }
-
-    // ----- [] Filter pointsPairsList to remove duplicates
-
-    List<Point[]> filteredPointsPairsList = new ArrayList<Point[]>();
-
-    for (int i = 0; i < pointsPairsList.size(); i++) {
-
-      boolean duplicated = false;
-      Point x = pointsPairsList.get(i)[0]; // first point of line segment
-      Point y = pointsPairsList.get(i)[1]; // last point of line segment
-
-      for (Point[] filteredPointsPair : filteredPointsPairsList) {
-        if (filteredPointsPair[0].compareTo(x) == 0 && filteredPointsPair[1].compareTo(y) == 0) {
-          duplicated = true;
-          break;
-        }
-      }
-
-      // ----- [] Save pair of points if not duplicated
-
-      if (!duplicated) {
-        filteredPointsPairsList.add(pointsPairsList.get(i));
-        numberOfSegments++;
-      }
-
-    }
-
-    // ----- [] Process results into LineSegment objects
-
-    segments = new LineSegment[numberOfSegments];
-
-    for (int i = 0; i < numberOfSegments; i++) {
-      segments[i] = new LineSegment(filteredPointsPairsList.get(i)[0],
-          filteredPointsPairsList.get(i)[1]);
-    }
-
-  }
-
-  /**
-   * Extract the end points of an array of <tt>Point</tt> and return them as a pair, in natural
-   * order.
-   */
-  private Point[] extractEndPoints(Point[] candidatePoints) {
-
-    Point startPoint = candidatePoints[0];
-    Point endPoint = candidatePoints[0];
-
-    for (Point point : candidatePoints) {
-
-      if (point.compareTo(startPoint) < 0) {
-        startPoint = point;
-      } else if (point.compareTo(endPoint) > 0) {
-        endPoint = point;
-      }
-
-    }
-
-    return new Point[] { startPoint, endPoint };
-
+      
   }
 
   /**
    * Returns the number of line segments found.
    */
   public int numberOfSegments() {
-    return numberOfSegments;
+    return segments.size();
   }
 
   /**
@@ -212,15 +149,7 @@ public class FastCollinearPoints {
    */
   public LineSegment[] segments() {
 
-    // ----- [] Make a defensive copy
-
-    LineSegment[] segmentsCopy = new LineSegment[numberOfSegments()];
-
-    for (int i = 0; i < numberOfSegments(); i++) {
-      segmentsCopy[i] = segments[i];
-    }
-
-    return segmentsCopy;
+    return segments.toArray(new LineSegment[segments.size()]);
 
   }
 
