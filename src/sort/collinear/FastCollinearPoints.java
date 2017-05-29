@@ -1,9 +1,8 @@
 package sort.collinear;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
-import edu.princeton.cs.algs4.MergeX;
 
 /**
  * FastCollinearPoints class from programming assignment 3 of Coursera Algorithms, Part I
@@ -12,9 +11,13 @@ import edu.princeton.cs.algs4.MergeX;
  * See assignment specification http://coursera.cs.princeton.edu/algs4/assignments/collinear.html
  * and checklist http://coursera.cs.princeton.edu/algs4/checklists/collinear.html
  * 
- * Style guide from http://introcs.cs.princeton.edu/java/11style/
- * 
  * Complete JavaDoc for edu.princeton.cs.algs4 at http://algs4.cs.princeton.edu/code/javadoc/
+ * 
+ * Comments:
+ * <ul>
+ * <li>Using <tt>Arrays.sort()</tt> is faster than using <tt>MergeX.sort()</tt>.</li>
+ * <li>Why can't I get 100%?</tt>
+ * </ul>
  */
 public class FastCollinearPoints {
 
@@ -44,7 +47,7 @@ public class FastCollinearPoints {
 
     n = points.length;
 
-    // ----- [] Copy to new array (to avoid modifying original)
+    // ----- [] Copy to new array (to avoid modifying original) and check for null
 
     Point[] pointsSortedByNaturalOrder = new Point[n]; // clone of points to be sorted in natural
                                                        // (coordinate) order
@@ -56,11 +59,10 @@ public class FastCollinearPoints {
       pointsSortedByNaturalOrder[i] = points[i];
     }
 
-    MergeX.sort(pointsSortedByNaturalOrder); // sort points by y-coordinates, breaking ties with
+    Arrays.sort(pointsSortedByNaturalOrder); // sort points by y-coordinates, breaking ties with
                                              // x-coordinates
 
-    // ----- [] Validate points to remove repeated points
-    // Also, copy points to another temporary array
+    // ----- [] Remove repeated points. Also, copy points to another temporary array
 
     Point[] pointsSortedBySlopeOrder = new Point[n]; // temporary array for holding points sorted by
                                                      // slope order
@@ -78,6 +80,7 @@ public class FastCollinearPoints {
     // ----- [] Loop through every point as reference point
 
     double[] slopes = new double[n]; // array for storing slopes relative to reference point
+
     // all points on all detected line segments, duplicates included
     List<Point[]> pointsPairsList = new ArrayList<Point[]>();
 
@@ -86,7 +89,7 @@ public class FastCollinearPoints {
       int collinearCount = 2; // Number of entries in pointsSlope[] that have equal slopes
       Point referencePoint = pointsSortedByNaturalOrder[i]; // change reference point
 
-      MergeX.sort(pointsSortedBySlopeOrder, referencePoint.slopeOrder()); // sort by slope order
+      Arrays.sort(pointsSortedBySlopeOrder, referencePoint.slopeOrder()); // sort by slope order
 
       // ----- [] Compute slopes relative to referencePoint
 
