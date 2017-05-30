@@ -4,7 +4,7 @@ Compilation:  PASSED
 API:          PASSED
 
 Findbugs:     PASSED
-Checkstyle:   FAILED (2 warnings)
+Checkstyle:   FAILED (1 warning)
 
 Correctness:  41/41 tests passed
 Memory:       1/1 tests passed
@@ -17,9 +17,9 @@ ASSESSMENT DETAILS
 
 The following files were submitted:
 ----------------------------------
-7.9K May 29 15:11 BruteCollinearPoints.java
-4.8K May 29 15:11 FastCollinearPoints.java
-8.6K May 29 15:11 Point.java
+7.9K May 30 01:12 BruteCollinearPoints.java
+6.2K May 30 01:12 FastCollinearPoints.java
+7.3K May 30 01:12 Point.java
 
 
 ********************************************************************************
@@ -64,9 +64,8 @@ FastCollinearPoints:
 
 % checkstyle *.java
 *-----------------------------------------------------------
-FastCollinearPoints.java:96: Line is longer than 128 characters (currently 144). [LineLength]
-FastCollinearPoints.java:111: Line is longer than 128 characters (currently 142). [LineLength]
-Checkstyle ends with 2 errors.
+FastCollinearPoints.java:167:5: File contains tab characters (this is the first occurrence). Configure your editor to replace tabs with spaces. [FileTabCharacter]
+Checkstyle ends with 1 error.
 
 ================================================================
 
@@ -474,11 +473,11 @@ Test 1a-1e: Find collinear points among n random distinct points
                                                       slopeTo()
              n    time     slopeTo()   compare()  + 2*compare()        compareTo()
 -----------------------------------------------------------------------------------------------
-=> passed    16   0.01         240           0            240                   73         
-=> passed    32   0.00         992           0            992                  171         
-=> passed    64   0.01        4032           0           4032                  385         
-=> passed   128   0.03       16256           0          16256                  927         
-=> passed   256   0.14       65280           0          65280                 2141         
+=> passed    16   0.01         240           0            240                   74         
+=> passed    32   0.00         992           0            992                  176         
+=> passed    64   0.01        4032           0           4032                  414         
+=> passed   128   0.03       16256           0          16256                  915         
+=> passed   256   0.14       65280           0          65280                 2125         
 ==> 5/5 tests passed
 
 Test 2a-2e: Find collinear points among n/4 arbitrary line segments
@@ -487,11 +486,11 @@ Test 2a-2e: Find collinear points among n/4 arbitrary line segments
                                                       slopeTo()
              n    time     slopeTo()   compare()  + 2*compare()        compareTo()
 -----------------------------------------------------------------------------------------------
-=> passed    16   0.00         240           0            240                  214         
+=> passed    16   0.00         240           0            240                  212         
 => passed    32   0.00         992           0            992                  587         
-=> passed    64   0.01        4032           0           4032                 1721         
-=> passed   128   0.03       16256           0          16256                 5703         
-=> passed   256   0.13       65280           0          65280                19753         
+=> passed    64   0.01        4032           0           4032                 1747         
+=> passed   128   0.03       16256           0          16256                 5659         
+=> passed   256   0.14       65280           0          65280                19821         
 ==> 5/5 tests passed
 
 Total: 10/10 tests passed!
@@ -511,15 +510,15 @@ Test 1a-1g: Find collinear points among n random distinct points
                                                       slopeTo()
              n    time     slopeTo()   compare()  + 2*compare()        compareTo()
 -----------------------------------------------------------------------------------------------
-=> passed    64   0.02        4096       18641          41378                18989         
-=> passed   128   0.01       16384       89027         194438                89759         
-=> passed   256   0.11       65536      413915         893366               413175         
-=> passed   512   0.22      262144     1892378        4046900              1900921         
-=> passed  1024   0.45     1048576     8540421       18129418              8554476         
-=> passed  2048   1.45     4194304    38179720       80553744             38204183         
+=> passed    64   0.02        4096       17702          39500                  371         
+=> passed   128   0.01       16384       84155         184694                  859         
+=> passed   256   0.02       65536      381949         829434                 1990         
+=> passed   512   0.18      262144     1773684        3809512                 4486         
+=> passed  1024   0.32     1048576     7941546       16931668                10002         
+=> passed  2048   0.83     4194304    35331525       74857354                22009         
 ==> 6/6 tests passed
 
-lg ratio(slopeTo() + 2*compare()) = lg (80553744 / 18129418) = 2.15
+lg ratio(slopeTo() + 2*compare()) = lg (74857354 / 16931668) = 2.14
 => passed
 
 ==> 7/7 tests passed
@@ -529,13 +528,13 @@ Test 2a-2g: Find collinear points among the n points on an n-by-1 grid
                                                       slopeTo()
              n    time     slopeTo()   compare()  + 2*compare()        compareTo()
 -----------------------------------------------------------------------------------------------
-=> passed    64   0.00        4096        4764          13624                 7139         
-=> passed   128   0.00       16384       17796          51976                23188         
-=> passed   256   0.00       65536       68717         202970                80305         
-=> passed   512   0.01      262144      269399         800942               293526         
-=> passed  1024   0.03     1048576     1065026        3178628              1114929         
-=> passed  2048   0.07     4194304     4231214       12656732              4333529         
-=> passed  4096   0.25    16777216    16859163       50495542             17068485         
+=> passed    64   0.00        4096        4764          13624                 6417         
+=> passed   128   0.00       16384       17796          51976                25248         
+=> passed   256   0.00       65536       68717         202970                99907         
+=> passed   512   0.01      262144      269399         800942               396939         
+=> passed  1024   0.03     1048576     1065026        3178628              1581302         
+=> passed  2048   0.08     4194304     4231214       12656732              6310445         
+=> passed  4096   0.21    16777216    16859163       50495542             25207802         
 ==> 7/7 tests passed
 
 lg ratio(slopeTo() + 2*compare()) = lg (50495542 / 12656732) = 2.00
@@ -548,16 +547,16 @@ Test 3a-3g: Find collinear points among the n points on an n/4-by-4 grid
                                                       slopeTo()
              n    time     slopeTo()   compare()  + 2*compare()        compareTo()
 -----------------------------------------------------------------------------------------------
-=> passed    64   0.00        4096       14906          33908                17176         
-=> passed   128   0.00       16384       43854         104092                64344         
-=> passed   256   0.01       65536      149618         364772               244890         
-=> passed   512   0.03      262144      548156        1358456               944581         
-=> passed  1024   0.08     1048576     2087496        5223568              3689109         
-=> passed  2048   0.32     4194304     8122445       20439194             14513196         
-=> passed  4096   1.21    16777216    31990953       80759122             57456894         
+=> passed    64   0.00        4096       13806          31708                 3335         
+=> passed   128   0.00       16384       49444         115272                12923         
+=> passed   256   0.01       65536      186057         437650                50648         
+=> passed   512   0.02      262144      709981        1682106               200114         
+=> passed  1024   0.06     1048576     2753051        6554678               794473         
+=> passed  2048   0.18     4194304    10799584       25793472              3163850         
+=> passed  4096   0.74    16777216    42682082      102141380             12623266         
 ==> 7/7 tests passed
 
-lg ratio(slopeTo() + 2*compare()) = lg (80759122 / 20439194) = 1.98
+lg ratio(slopeTo() + 2*compare()) = lg (102141380 / 25793472) = 1.99
 => passed
 
 ==> 8/8 tests passed
@@ -567,16 +566,16 @@ Test 4a-4g: Find collinear points among the n points on an n/8-by-8 grid
                                                       slopeTo()
              n    time     slopeTo()   compare()  + 2*compare()        compareTo()
 -----------------------------------------------------------------------------------------------
-=> passed    64   0.00        4096       18045          40186                19118         
-=> passed   128   0.00       16384       75863         168110                85765         
-=> passed   256   0.01       65536      232229         529994               341203         
-=> passed   512   0.04      262144      854545        1971234              1342580         
-=> passed  1024   0.13     1048576     3260991        7570558              5319913         
-=> passed  2048   0.48     4194304    12699218       29592740             21174403         
-=> passed  4096   1.80    16777216    50043244      116863704             84369490         
+=> passed    64   0.00        4096       16785          37666                 3334         
+=> passed   128   0.00       16384       65945         148274                12914         
+=> passed   256   0.01       65536      246644         558824                50761         
+=> passed   512   0.02      262144      949973        2162090               200905         
+=> passed  1024   0.07     1048576     3696110        8440796               798475         
+=> passed  2048   0.27     4194304    14514416       33223136              3181765         
+=> passed  4096   1.06    16777216    57416412      131610040             12699035         
 ==> 7/7 tests passed
 
-lg ratio(slopeTo() + 2*compare()) = lg (116863704 / 29592740) = 1.98
+lg ratio(slopeTo() + 2*compare()) = lg (131610040 / 33223136) = 1.99
 => passed
 
 ==> 8/8 tests passed
@@ -585,3 +584,4 @@ Total: 31/31 tests passed!
 
 
 ================================================================
+
