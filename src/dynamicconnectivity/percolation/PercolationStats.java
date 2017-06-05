@@ -19,9 +19,6 @@ import edu.princeton.cs.algs4.Stopwatch;
  * Classes used include: StdRandom -
  * http://algs4.cs.princeton.edu/code/javadoc/edu/princeton/cs/algs4/StdRandom.html StdStats -
  * http://algs4.cs.princeton.edu/code/javadoc/edu/princeton/cs/algs4/StdStats.html
- * 
- * @author Foo, Ming Qing (December 2016)
- *
  */
 public class PercolationStats {
 
