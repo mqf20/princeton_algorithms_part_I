@@ -3,6 +3,7 @@ package sort;
 import java.util.Random;
 
 import edu.princeton.cs.algs4.Stopwatch;
+import priorityqueues.HeapSort;
 
 /**
  * Class for testing sorting algorithms.
@@ -117,6 +118,22 @@ public class TestSort {
       System.out.println(">> 3-way quick sort took " + stopwatch.elapsedTime() + " ms");
     } else {
       System.out.println(">> 3-way quick sort failed!");
+    }
+    
+    // ----- [] Performance testing with Heap Sort
+    
+    for (int i = 0; i < numSamples; i++) {
+      temp[i] = samples[i];
+    }
+
+    stopwatch = new Stopwatch();
+
+    HeapSort.sort(temp);
+
+    if (Sort.isSorted(temp)) {
+      System.out.println(">> Heap sort took " + stopwatch.elapsedTime() + " ms");
+    } else {
+      System.out.println(">> Heap sort failed!");
     }
 
   }
