@@ -18,9 +18,8 @@ import java.util.List;
  * <li>Using <tt>Arrays.sort()</tt> is faster than using <tt>MergeX.sort()</tt>.</li>
  * <li>Point.slopeTo(Point) is communicative -- the sequence of points doesn't matter when
  * computing slope between a pair.</li>
- * <li>Uses an optimization "trick" that removes duplicate line segments by adding an extra
- * sort by natural order in the first loop and checking if pMin == referencePoint.</li>
- * <li><tt>Arrays.sort()</tt> must be stable for this trick to work!</li>
+ * <li>Uses an optimization "trick" that removes duplicate line segments by checking if the reference point is smaller
+ * than all the other collinear points.</li>
  * </ul>
  */
 public class FastCollinearPoints {
@@ -88,11 +87,6 @@ public class FastCollinearPoints {
 
       Point referencePoint = pointsSortedByNaturalOrder[i]; // change reference point
 
-      Arrays.sort(pointsSortedBySlopeOrder);  // necessary for optimization "trick" -- points must
-                                              // be sorted by natural order so that duplicates can
-                                              // be identified. Also relies on fact that 
-                                              // Arrays.sort() is stable!
-            
       Arrays.sort(pointsSortedBySlopeOrder, referencePoint.slopeOrder()); // sort by slope order
 
       // ----- [] Compute slopes relative to referencePoint
@@ -117,12 +111,10 @@ public class FastCollinearPoints {
         if (maxIndex - 1 - minIndex >= COLLINEAR_THRESHOLD - 2) {  
           // because maxIndex would have overshot by 1
           
-          Point pMin = referencePoint.compareTo(pointsSortedBySlopeOrder[minIndex]) < 0 
-              ? referencePoint : pointsSortedBySlopeOrder[minIndex];
-          
-          if (pMin == referencePoint) {
-            Point pMax = pointsSortedBySlopeOrder[maxIndex - 1];
-            segments.add(new LineSegment(pMin, pMax));
+          // Optimization "trick"!
+          Point[] smallestLargestPoints = findSmallestLargestPoint(pointsSortedBySlopeOrder, minIndex, maxIndex - 1);
+          if (referencePoint.compareTo(smallestLargestPoints[0]) < 0) {
+            segments.add(new LineSegment(referencePoint, smallestLargestPoints[1]));
           }
           
         }
@@ -151,6 +143,25 @@ public class FastCollinearPoints {
 
     return segments.toArray(new LineSegment[segments.size()]);
 
+  }
+  
+  /**
+   * Given an array of <tt>Point</tt>, scan the array from <tt>minIndex</tt> (inclusive) to <tt>maxIndex</tt> 
+   * (inclusive) and return a new array with the smallest <tt>Point</tt> and largest <tt>Point</tt> according to 
+   * natural order.
+   */
+  private Point[] findSmallestLargestPoint(Point[] points, int minIndex, int maxIndex) {
+    Point smallestPoint = points[minIndex];
+    Point largestPoint = smallestPoint;
+    for (int i = minIndex + 1; i <= maxIndex; i++) {
+      Point q = points[i];
+      if (q.compareTo(smallestPoint) < 0) {
+        smallestPoint = q;
+      } else if (q.compareTo(largestPoint) > 0) {
+      largestPoint = q;
+      }
+    }
+    return new Point[]{smallestPoint, largestPoint};
   }
 
 }
