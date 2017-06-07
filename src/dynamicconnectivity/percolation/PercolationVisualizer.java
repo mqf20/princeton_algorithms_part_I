@@ -73,7 +73,7 @@ public class PercolationVisualizer {
 
     // In in = new In(args[0]); // input file
 
-    In in = new In("src/dynamicConnectivity/percolation/input6.txt"); // Example
+    In in = new In("src/dynamicconnectivity/percolation/input6.txt"); // Example
 
     int gridLength = in.readInt(); // N-by-N percolation system
 

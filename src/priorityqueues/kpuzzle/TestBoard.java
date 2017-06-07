@@ -1,0 +1,192 @@
+package priorityqueues.kpuzzle;
+
+import java.util.Iterator;
+import java.util.Scanner;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import edu.princeton.cs.algs4.In;
+
+public class TestBoard {
+
+  private final Board board1 = readBoard("src/priorityqueues/kpuzzle/puzzle04.txt");
+  private final Board board2 = readBoard("src/priorityqueues/kpuzzle/puzzle05.txt");
+
+  // ----- [] test constructor
+
+  @Test(expected = IllegalArgumentException.class)
+  public void test_constructor_inconsistent_blocks1() {
+    int[][] blocks = new int[10][0];
+    new Board(blocks);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void test_constructor_inconsistent_blocks2() {
+    int[][] blocks = new int[10][10]; // duplicate labels of 0
+    new Board(blocks);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void test_constructor_inconsistent_blocks3() {
+    int[][] blocks = new int[2][2];
+    blocks[0][0] = 1;
+    blocks[1][0] = 2;
+    blocks[1][1] = 2; // duplicate
+    new Board(blocks);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void test_constructor_null_blocks() {
+    new Board(null);
+  }
+
+  // ----- [] test dimension()
+
+  @Test
+  public void test_dimension1() {
+    Assert.assertEquals("Wrong dimension", 3, board1.dimension());
+  }
+
+  @Test
+  public void test_dimension2() {
+    Assert.assertEquals("Wrong dimension", 3, board2.dimension());
+  }
+
+  // ----- [] test hamming()
+
+  @Test
+  public void test_hamming1() {
+    Assert.assertEquals("Wrong hamming value", 4, board1.hamming());
+  }
+
+  @Test
+  public void test_hamming2() {
+    Assert.assertEquals("Wrong hamming value", 5, board2.hamming());
+  }
+
+  // ----- [] test manhattan()
+
+  @Test
+  public void test_manhattan1() {
+    Assert.assertEquals("Wrong manhattan value", 4, board1.manhattan());
+  }
+
+  @Test
+  public void test_manhattan2() {
+    Assert.assertEquals("Wrong manhattan value", 5, board2.manhattan());
+  }
+
+  // ----- [] test isGoal()
+
+  @Test
+  public void test_isGoal1() {
+    Assert.assertFalse("Should not be completed", board1.isGoal());
+  }
+
+  @Test
+  public void test_isGoal2() {
+    Assert.assertFalse("Should not be completed", board2.isGoal());
+  }
+  
+  // ----- [] test twin() 
+  
+  @Test
+  public void test_twin1() {
+    board1.twin();
+  }
+
+  @Test
+  public void test_twin2() {
+    board2.twin();
+  }
+
+  // ----- [] test equals()
+
+  @Test
+  public void test_equals1() {
+    Assert.assertTrue("Should be equal",
+        board1.equals(readBoard("src/priorityqueues/kpuzzle/puzzle04.txt")));
+  }
+
+  @Test
+  public void test_equals2() {
+    Assert.assertTrue("Should be equal",
+        board2.equals(readBoard("src/priorityqueues/kpuzzle/puzzle05.txt")));
+  }
+  
+  // ----- [] test neighbors() 
+  
+  @Test
+  public void test_neighbors1() {
+    Iterable<Board> neighbors = board1.neighbors();
+    int size = 0;
+    for (Board board : neighbors) {
+      size++;
+    }
+    Assert.assertEquals("Should have two neighbors", 2, size);
+  }
+
+  @Test
+  public void test_neighbors2() {
+    Iterable<Board> neighbors = board2.neighbors();
+    int size = 0;
+    for (Board board : neighbors) {
+      size++;
+    }
+    Assert.assertEquals("Should have three neighbors", 3, size);
+  }
+
+  // ----- [] test toString()
+
+  @Test
+  public void test_toString1() {
+    String boardString = board1.toString();
+    Scanner scanner = new Scanner(boardString);
+    int dimension = Integer.parseInt(scanner.next());
+    Assert.assertEquals("String should reveal dimension of 3", 3, dimension);
+
+    int[] labels = new int[] {0, 1, 3, 4, 2, 5, 7, 8, 6};
+    int i = 0;
+    while (scanner.hasNext()) {
+      Assert.assertEquals("String should match labels", labels[i++],
+          Integer.parseInt(scanner.next()));
+    }
+
+    scanner.close();
+  }
+
+  @Test
+  public void test_toString2() {
+    String boardString = board2.toString();
+    Scanner scanner = new Scanner(boardString);
+    int dimension = Integer.parseInt(scanner.next());
+    Assert.assertEquals("String should reveal dimension of 3", 3, dimension);
+
+    int[] labels = new int[] {4, 1, 3, 0, 2, 6, 7, 5, 8};
+    int i = 0;
+    while (scanner.hasNext()) {
+      Assert.assertEquals("String should match labels", labels[i++],
+          Integer.parseInt(scanner.next()));
+    }
+
+    scanner.close();
+  }
+
+  // ----- [] helper methods
+
+  private static Board readBoard(String fileName) {
+
+    In in = new In(fileName);
+    int n = in.readInt();
+    int[][] blocks = new int[n][n];
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
+        blocks[i][j] = in.readInt();
+      }
+    }
+    return new Board(blocks);
+
+  }
+
+}
