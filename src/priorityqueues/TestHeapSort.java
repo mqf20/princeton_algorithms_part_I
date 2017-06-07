@@ -7,6 +7,9 @@ import org.junit.Test;
 
 import sort.Sort;
 
+/**
+ * Test class for priorityqueues.HeapSort.
+ */
 public class TestHeapSort {
   
   @Test
