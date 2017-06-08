@@ -1,6 +1,8 @@
 package priorityqueues.kpuzzle;
 
 import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.MinPQ;
+import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
 
 /**
@@ -9,13 +11,50 @@ import edu.princeton.cs.algs4.StdOut;
  */
 public class Solver {
 
+  /**
+   * Constants
+   */
   public static int UNSOLVABLE = -1; // implies that this board is unsolvable
+  
+  /**
+   * Variables
+   */
+  private Stack<Board> solutionStack = new Stack<Board>();
+  private boolean solvable = false;
 
   /**
    * Accepts an initial board and finds a solution to this board.
    */
   public Solver(Board initial) {
+    
+    // ----- [] Primary board
+    
+    Board primaryBoard = initial;
+    MinPQ<Board> primaryPQ = new MinPQ<Board>(Board.BY_HAMMING);  // http://algs4.cs.princeton.edu/code/javadoc/edu/princeton/cs/algs4/MinPQ.html
+    primaryPQ.insert(primaryBoard);
+    
+    // ----- [] Prepare a secondary board in case initial board is unsolvable
 
+    Board secondaryBoard = initial.twin();  // either primaryBoard or secondaryBoard will lead to a solution
+    MinPQ<Board> secondaryPQ = new MinPQ<Board>(Board.BY_HAMMING);  // http://algs4.cs.princeton.edu/code/javadoc/edu/princeton/cs/algs4/MinPQ.html
+    secondaryPQ.insert(secondaryBoard);
+    
+    boolean complete = false;
+    
+    while (!complete) {
+      
+      Iterable<Board> primaryNeighbors = primaryBoard.neighbors();
+      
+      for (Board board : primaryNeighbors) {
+        // add to primaryPQ if not equal to previousNode
+
+      }
+      
+      Iterable<Board> secondaryNeighbors = secondaryBoard.neighbors();
+      
+    }
+    
+    
   }
 
   /**
@@ -39,7 +78,7 @@ public class Solver {
   public Iterable<Board> solution() {
     return null;
   }
-
+  
   /**
    * Solve a slider puzzle (provided by assignment).
    */
