@@ -127,6 +127,10 @@ public class Board {
    */
   @Override
   public boolean equals(Object y) {
+    // inspired by http://algs4.cs.princeton.edu/12oop/Date.java.html
+    if (y == null) return false;
+    if (y == this) return true;
+    if (y.getClass() != this.getClass()) return false;
     return y.toString().equalsIgnoreCase(toString());
   }
 
