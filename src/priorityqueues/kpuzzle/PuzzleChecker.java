@@ -19,6 +19,8 @@ import edu.princeton.cs.algs4.StdOut;
 public class PuzzleChecker {
 
   public static void main(String[] args) {
+    
+    args = new String[]{"src/priorityqueues/kpuzzle/puzzle04.txt"};  // modify this and run off Eclipse
 
     // for each command-line argument
     for (String filename : args) {
