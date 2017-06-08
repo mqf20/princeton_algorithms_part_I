@@ -12,6 +12,7 @@ public class TestBoard {
 
   private final Board board1 = readBoard("src/priorityqueues/kpuzzle/puzzle04.txt");
   private final Board board2 = readBoard("src/priorityqueues/kpuzzle/puzzle05.txt");
+  private final Board board3 = readBoard("src/priorityqueues/kpuzzle/puzzle08.txt");
 
   // ----- [] test constructor
 
@@ -53,6 +54,11 @@ public class TestBoard {
     Assert.assertEquals("Wrong dimension", 3, board2.dimension());
   }
 
+  @Test
+  public void test_dimension3() {
+    Assert.assertEquals("Wrong dimension", 3, board3.dimension());
+  }
+
   // ----- [] test hamming()
 
   @Test
@@ -63,6 +69,11 @@ public class TestBoard {
   @Test
   public void test_hamming2() {
     Assert.assertEquals("Wrong hamming value", 5, board2.hamming());
+  }
+
+  @Test
+  public void test_hamming3() {
+    Assert.assertEquals("Wrong hamming value", 6, board3.hamming());
   }
 
   // ----- [] test manhattan()
@@ -77,6 +88,11 @@ public class TestBoard {
     Assert.assertEquals("Wrong manhattan value", 5, board2.manhattan());
   }
 
+  @Test
+  public void test_manhattan3() {
+    Assert.assertEquals("Wrong manhattan value", 8, board3.manhattan());
+  }
+
   // ----- [] test isGoal()
 
   @Test
@@ -87,6 +103,11 @@ public class TestBoard {
   @Test
   public void test_isGoal2() {
     Assert.assertFalse("Should not be completed", board2.isGoal());
+  }
+
+  @Test
+  public void test_isGoal3() {
+    Assert.assertFalse("Should not be completed", board3.isGoal());
   }
   
   // ----- [] test twin() 
@@ -101,6 +122,11 @@ public class TestBoard {
     board2.twin();
   }
 
+  @Test
+  public void test_twin3() {
+    board3.twin();
+  }
+
   // ----- [] test equals()
 
   @Test
@@ -113,6 +139,12 @@ public class TestBoard {
   public void test_equals2() {
     Assert.assertTrue("Should be equal",
         board2.equals(readBoard("src/priorityqueues/kpuzzle/puzzle05.txt")));
+  }
+
+  @Test
+  public void test_equals3() {
+    Assert.assertTrue("Should be equal",
+        board3.equals(readBoard("src/priorityqueues/kpuzzle/puzzle08.txt")));
   }
   
   // ----- [] test neighbors() 
@@ -135,6 +167,16 @@ public class TestBoard {
       size++;
     }
     Assert.assertEquals("Should have three neighbors", 3, size);
+  }
+
+  @Test
+  public void test_neighbors3() {
+    Iterable<Board> neighbors = board3.neighbors();
+    int size = 0;
+    for (Board board : neighbors) {
+      size++;
+    }
+    Assert.assertEquals("Should have three neighbors", 4, size);
   }
 
   // ----- [] test toString()
@@ -164,6 +206,24 @@ public class TestBoard {
     Assert.assertEquals("String should reveal dimension of 3", 3, dimension);
 
     int[] labels = new int[] {4, 1, 3, 0, 2, 6, 7, 5, 8};
+    int i = 0;
+    while (scanner.hasNext()) {
+      Assert.assertEquals("String should match labels", labels[i++],
+          Integer.parseInt(scanner.next()));
+    }
+
+    scanner.close();
+  }
+
+
+  @Test
+  public void test_toString3() {
+    String boardString = board3.toString();
+    Scanner scanner = new Scanner(boardString);
+    int dimension = Integer.parseInt(scanner.next());
+    Assert.assertEquals("String should reveal dimension of 3", 3, dimension);
+
+    int[] labels = new int[] {2, 3, 5, 1, 0, 4, 7, 8, 6};
     int i = 0;
     while (scanner.hasNext()) {
       Assert.assertEquals("String should match labels", labels[i++],
