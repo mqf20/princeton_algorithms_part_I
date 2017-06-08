@@ -109,9 +109,9 @@ public class TestBoard {
   public void test_isGoal3() {
     Assert.assertFalse("Should not be completed", board3.isGoal());
   }
-  
-  // ----- [] test twin() 
-  
+
+  // ----- [] test twin()
+
   @Test
   public void test_twin1() {
     board1.twin();
@@ -146,9 +146,9 @@ public class TestBoard {
     Assert.assertTrue("Should be equal",
         board3.equals(readBoard("src/priorityqueues/kpuzzle/puzzle08.txt")));
   }
-  
-  // ----- [] test neighbors() 
-  
+
+  // ----- [] test neighbors()
+
   @Test
   public void test_neighbors1() {
     Iterable<Board> neighbors = board1.neighbors();
@@ -215,7 +215,6 @@ public class TestBoard {
     scanner.close();
   }
 
-
   @Test
   public void test_toString3() {
     String boardString = board3.toString();
@@ -231,6 +230,46 @@ public class TestBoard {
     }
 
     scanner.close();
+  }
+
+  // ----- [] test hamming comparators
+
+  @Test
+  public void test_comparator_hamming1() {
+    Assert.assertTrue("board1 should have smaller hamming than board2",
+        Board.BY_HAMMING.compare(board1, board2) < 0);
+  }
+
+  @Test
+  public void test_comparator_hamming2() {
+    Assert.assertTrue("board3 should have larger hamming than board2",
+        Board.BY_HAMMING.compare(board3, board2) > 0);
+  }
+
+  @Test
+  public void test_comparator_hamming3() {
+    Assert.assertTrue("board should have same hamming as itself",
+        Board.BY_HAMMING.compare(board1, board1) == 0);
+  }
+
+  // ----- [] test manhattan comparators
+
+  @Test
+  public void test_comparator_manhattan1() {
+    Assert.assertTrue("board1 should have smaller manhattan than board2",
+        Board.BY_MANHATTAN.compare(board1, board2) < 0);
+  }
+
+  @Test
+  public void test_comparator_manhattan2() {
+    Assert.assertTrue("board3 should have larger manhattan than board2",
+        Board.BY_MANHATTAN.compare(board3, board2) > 0);
+  }
+
+  @Test
+  public void test_comparator_manhattan3() {
+    Assert.assertTrue("board should have same manhattan as itself",
+        Board.BY_MANHATTAN.compare(board1, board1) == 0);
   }
 
   // ----- [] helper methods

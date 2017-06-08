@@ -1,14 +1,19 @@
 package priorityqueues.kpuzzle;
 
+import java.util.Comparator;
 import java.util.Random;
 
 import edu.princeton.cs.algs4.Stack;
+import sort.StudentComparatorExample;
 
 /**
  * Board from assignment of Week 4, Coursera Algorithms, Part I
  * (https://class.coursera.org/algs4partI-010).
  */
 public class Board {
+
+  public static final Comparator<Board> BY_HAMMING = new ByHamming();
+  public static final Comparator<Board> BY_MANHATTAN = new ByManhattan();
 
   private int[][] blocks; // represents an n-by-n array of blocks
   private int dimension;
@@ -22,11 +27,11 @@ public class Board {
       throw new NullPointerException("board cannot be null");
     }
     dimension = blocks.length;
-    
+
     this.blocks = new int[dimension][dimension];
-    
+
     boolean[] indices = new boolean[dimension * dimension + 1];
-    for (int i = 0; i < dimension; i ++) {
+    for (int i = 0; i < dimension; i++) {
       if (blocks[i] == null || blocks[i].length != dimension) {
         throw new IllegalArgumentException("Inconsistent board");
       }
@@ -54,8 +59,8 @@ public class Board {
     int hammingValue = 0;
     for (int i = 1; i <= dimension; i++) {
       for (int j = 1; j <= dimension; j++) {
-        int label = blocks[i-1][j-1];
-        if (label != 0 && label != j + dimension * (i - 1)) {  // ignore 0 label
+        int label = blocks[i - 1][j - 1];
+        if (label != 0 && label != j + dimension * (i - 1)) { // ignore 0 label
           hammingValue++;
         }
       }
@@ -70,11 +75,11 @@ public class Board {
     int manhattanValue = 0;
     for (int i = 1; i <= dimension; i++) {
       for (int j = 1; j <= dimension; j++) {
-        int label = blocks[i-1][j-1];
-        if (label != 0 && label != j + dimension * (i - 1)) {  // ignore 0 label
+        int label = blocks[i - 1][j - 1];
+        if (label != 0 && label != j + dimension * (i - 1)) { // ignore 0 label
           int verticalOffset = Math.abs((label - 1) / dimension + 1 - i);
           int col = (label % dimension) == 0 ? dimension : (label % dimension);
-          int horizontalOffset = Math.abs(col  - j);  // horizontal offset
+          int horizontalOffset = Math.abs(col - j); // horizontal offset
           manhattanValue += verticalOffset + horizontalOffset;
         }
       }
@@ -88,8 +93,8 @@ public class Board {
   public boolean isGoal() {
     for (int i = 1; i <= dimension; i++) {
       for (int j = 1; j <= dimension; j++) {
-        int label = blocks[i-1][j-1];
-        if (label != 0 && label != j + dimension * (i - 1)) {  // ignore 0 label
+        int label = blocks[i - 1][j - 1];
+        if (label != 0 && label != j + dimension * (i - 1)) { // ignore 0 label
           return false;
         }
       }
@@ -101,7 +106,7 @@ public class Board {
    * Return a <tt>Board</tt> that is obtained by randomly exchanging any pair of blocks.
    */
   public Board twin() {
-    
+
     // Choose two blocks at random that are non-zero
     int iRandom1 = 0;
     int jRandom1 = 0;
@@ -113,7 +118,7 @@ public class Board {
       jRandom1 = new Random().nextInt(dimension);
       jRandom2 = new Random().nextInt(dimension);
     }
-    
+
     // clone and swap
     int[][] clone = cloneBlocks();
     swap(clone, iRandom1, jRandom1, iRandom2, jRandom2);
@@ -128,9 +133,12 @@ public class Board {
   @Override
   public boolean equals(Object y) {
     // inspired by http://algs4.cs.princeton.edu/12oop/Date.java.html
-    if (y == null) return false;
-    if (y == this) return true;
-    if (y.getClass() != this.getClass()) return false;
+    if (y == null)
+      return false;
+    if (y == this)
+      return true;
+    if (y.getClass() != this.getClass())
+      return false;
     return y.toString().equalsIgnoreCase(toString());
   }
 
@@ -138,12 +146,12 @@ public class Board {
    * Return all neighboring boards.
    */
   public Iterable<Board> neighbors() {
-    
+
     // find the location of the space (0)
     int i = 0;
     int j = 0;
     boolean found = false;
-    
+
     while (i < dimension) {
       j = 0;
       while (j < dimension) {
@@ -172,7 +180,7 @@ public class Board {
       stack.push(new Board(swapBelow(i, j)));
       stack.push(new Board(swapAbove(i, j)));
     }
-    
+
     if (j == 0) {
       // Only swap with the block on the right
       stack.push(new Board(swapRight(i, j)));
@@ -184,7 +192,7 @@ public class Board {
       stack.push(new Board(swapRight(i, j)));
       stack.push(new Board(swapLeft(i, j)));
     }
-    
+
     return stack;
 
   }
@@ -204,7 +212,7 @@ public class Board {
     }
     return stringBuilder.toString();
   }
-  
+
   /**
    * Return a defensive copy of <tt>blocks</tt>.
    */
@@ -217,35 +225,47 @@ public class Board {
     }
     return clone;
   }
-  
+
   private int[][] swapAbove(int i, int j) {
     int[][] clone = cloneBlocks();
-    swap(clone, i, j, i-1, j);
+    swap(clone, i, j, i - 1, j);
     return clone;
   }
-  
+
   private int[][] swapBelow(int i, int j) {
     int[][] clone = cloneBlocks();
-    swap(clone, i, j, i+1, j);
+    swap(clone, i, j, i + 1, j);
     return clone;
   }
-  
-  private int[][] swapLeft(int i, int j ) {
+
+  private int[][] swapLeft(int i, int j) {
     int[][] clone = cloneBlocks();
-    swap(clone, i, j, i, j-1);
+    swap(clone, i, j, i, j - 1);
     return clone;
   }
-  
+
   private int[][] swapRight(int i, int j) {
     int[][] clone = cloneBlocks();
-    swap(clone, i, j, i, j+1);
+    swap(clone, i, j, i, j + 1);
     return clone;
   }
-  
+
   private void swap(int[][] tempBlocks, int i0, int j0, int i1, int j1) {
     int temp = tempBlocks[i1][j1];
     tempBlocks[i1][j1] = tempBlocks[i0][j0];
     tempBlocks[i0][j0] = temp;
+  }
+
+  private static class ByHamming implements Comparator<Board> {
+    public int compare(Board v, Board w) {
+      return v.hamming() - w.hamming();  // assume no danger of underflow
+    }
+  }
+
+  private static class ByManhattan implements Comparator<Board> {
+    public int compare(Board v, Board w) {
+      return v.manhattan() - w.manhattan();  // assume no danger of underflow
+    }
   }
 
 }
