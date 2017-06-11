@@ -4,7 +4,6 @@ import java.util.Comparator;
 import java.util.Random;
 
 import edu.princeton.cs.algs4.Stack;
-import sort.StudentComparatorExample;
 
 /**
  * Board from assignment of Week 4, Coursera Algorithms, Part I
