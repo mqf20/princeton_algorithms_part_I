@@ -36,6 +36,10 @@ public class Solver {
    * Accepts an initial board and finds a solution to this board.
    */
   public Solver(Board initial) {
+    
+    if (initial == null) {
+      throw new NullPointerException();
+    }
 
     // ----- [] Primary board
 
@@ -52,6 +56,10 @@ public class Solver {
 
     for (int i = 0; i < MAX_ITERS; i++) {
 
+      if (i == MAX_ITERS) {
+        throw new IllegalArgumentException("Reached MAX_ITERS");
+      }
+
       // ----- [] Process primary
 
       SearchNode primarySearchNode = primaryPQ.delMin();
@@ -65,7 +73,7 @@ public class Solver {
         }
         break;
       }
-      
+
       processSearchNode(primaryPQ, primarySearchNode);
 
       // ----- [] Process secondary
@@ -75,8 +83,10 @@ public class Solver {
       if (secondarySearchNode.board.isGoal()) {
         break; // initial board is not solvable
       }
-      
+
       processSearchNode(secondaryPQ, secondarySearchNode);
+      
+      numMoves++;
 
     }
 
@@ -114,9 +124,10 @@ public class Solver {
     Iterable<Board> neighbors = searchNode.board.neighbors();
     for (Board board : neighbors) {
       // add to minPQ if not equal to previousNode
-      if (searchNode.prevSearchNode != null && !searchNode.prevSearchNode.board.equals(board)) {
-        minPQ.insert(new SearchNode(board, numMoves, searchNode));
+      if (searchNode.prevSearchNode != null && searchNode.prevSearchNode.board.equals(board)) {
+        continue;
       }
+      minPQ.insert(new SearchNode(board, numMoves, searchNode));
     }
   }
 

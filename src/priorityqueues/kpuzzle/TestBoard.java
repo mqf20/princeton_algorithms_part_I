@@ -7,6 +7,9 @@ import org.junit.Test;
 
 import edu.princeton.cs.algs4.In;
 
+/**
+ * Test class for priorityqueues.kpuzzle.Board.
+ */
 public class TestBoard {
 
   private final Board board1 = readBoard("src/priorityqueues/kpuzzle/puzzle04.txt");
@@ -273,7 +276,7 @@ public class TestBoard {
 
   // ----- [] helper methods
 
-  private static Board readBoard(String fileName) {
+  public static Board readBoard(String fileName) {
 
     In in = new In(fileName);
     int n = in.readInt();
