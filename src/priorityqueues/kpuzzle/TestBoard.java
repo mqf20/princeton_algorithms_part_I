@@ -1,6 +1,5 @@
 package priorityqueues.kpuzzle;
 
-import java.util.Iterator;
 import java.util.Scanner;
 
 import org.junit.Assert;
