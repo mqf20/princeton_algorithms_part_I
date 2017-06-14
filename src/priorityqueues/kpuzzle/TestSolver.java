@@ -27,15 +27,6 @@ public class TestSolver {
   }
 
   @Test
-  public void test_solver_puzzle2x2_unsolveable1() {
-    Solver solver =
-        new Solver(TestBoard.readBoard("src/priorityqueues/kpuzzle/puzzle2x2-unsolvable1.txt"));
-    Assert.assertFalse("Should not be solvable", solver.isSolvable());
-    Assert.assertEquals("Should not be solvable", Solver.UNSOLVABLE, solver.moves());
-    Assert.assertNull("Should not be solvable", solver.solution());
-  }
-
-  @Test
   public void test_solver_puzzle07() {
     Solver solver = new Solver(TestBoard.readBoard("src/priorityqueues/kpuzzle/puzzle07.txt"));
     Assert.assertTrue("Should be solvable", solver.isSolvable());
@@ -49,9 +40,27 @@ public class TestSolver {
   }
 
   @Test
+  public void test_solver_puzzle2x2_unsolveable1() {
+    Solver solver =
+        new Solver(TestBoard.readBoard("src/priorityqueues/kpuzzle/puzzle2x2-unsolvable1.txt"));
+    Assert.assertFalse("Should not be solvable", solver.isSolvable());
+    Assert.assertEquals("Should not be solvable", Solver.UNSOLVABLE, solver.moves());
+    Assert.assertNull("Should not be solvable", solver.solution());
+  }
+
+  @Test
   public void test_solver_puzzle2x2_unsolveable2() {
     Solver solver =
         new Solver(TestBoard.readBoard("src/priorityqueues/kpuzzle/puzzle2x2-unsolvable2.txt"));
+    Assert.assertFalse("Should not be solvable", solver.isSolvable());
+    Assert.assertEquals("Should not be solvable", Solver.UNSOLVABLE, solver.moves());
+    Assert.assertNull("Should not be solvable", solver.solution());
+  }
+
+  @Test
+  public void test_solver_puzzle3x3_unsolveable() {
+    Solver solver =
+        new Solver(TestBoard.readBoard("src/priorityqueues/kpuzzle/puzzle3x3-unsolvable.txt"));
     Assert.assertFalse("Should not be solvable", solver.isSolvable());
     Assert.assertEquals("Should not be solvable", Solver.UNSOLVABLE, solver.moves());
     Assert.assertNull("Should not be solvable", solver.solution());

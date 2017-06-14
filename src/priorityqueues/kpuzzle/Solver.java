@@ -16,27 +16,26 @@ public class Solver {
    * Constants
    */
   public static final int UNSOLVABLE = -1; // implies that this board is unsolvable
-  public static final int MAX_ITERS = 1000;
+  public static final int MAX_ITERS = 100000;
 
   public enum PriorityFunction {
     HAMMING, MANHATTAN;
   }
 
-  public static final PriorityFunction PRIORITY_FUNCTION_CHOICE = PriorityFunction.HAMMING;
+  public static final PriorityFunction PRIORITY_FUNCTION_CHOICE = PriorityFunction.MANHATTAN;
   // this is the priority function used by the A* search algorithm
 
   /**
    * Variables
    */
   private Stack<Board> solutionStack = new Stack<Board>();
-  private int numMoves; // number of moves required to reach the goal
   private boolean solvable = false;
 
   /**
    * Accepts an initial board and finds a solution to this board.
    */
   public Solver(Board initial) {
-    
+
     if (initial == null) {
       throw new NullPointerException();
     }
@@ -46,27 +45,27 @@ public class Solver {
     MinPQ<SearchNode> primaryPQ = new MinPQ<SearchNode>();
     // See http://algs4.cs.princeton.edu/code/javadoc/edu/princeton/cs/algs4/MinPQ.html for MinPQ
     primaryPQ.insert(new SearchNode(initial, 0, null));
-
+    
     // ----- [] Prepare a secondary board in case initial board is unsolvable
 
     MinPQ<SearchNode> secondaryPQ = new MinPQ<SearchNode>();
     secondaryPQ.insert(new SearchNode(initial.twin(), 0, null));
 
     // ----- [] Begin A* search algorithm
+    
+    boolean complete = false;
 
-    for (int i = 0; i < MAX_ITERS; i++) {
-
-      if (i == MAX_ITERS) {
-        throw new IllegalArgumentException("Reached MAX_ITERS");
-      }
-
+    for (int i = 1; i <= MAX_ITERS; i++) {
+      
       // ----- [] Process primary
 
       SearchNode primarySearchNode = primaryPQ.delMin();
 
       if (primarySearchNode.board.isGoal()) {
+        complete = true;
         solvable = true;
         SearchNode searchNode = primarySearchNode;
+        // recover sequence of solution
         while (searchNode != null) {
           solutionStack.push(searchNode.board);
           searchNode = searchNode.prevSearchNode;
@@ -74,20 +73,23 @@ public class Solver {
         break;
       }
 
-      processSearchNode(primaryPQ, primarySearchNode);
+      processSearchNode(primaryPQ, primarySearchNode, primarySearchNode.numMoves + 1);
 
       // ----- [] Process secondary
 
       SearchNode secondarySearchNode = secondaryPQ.delMin();
 
       if (secondarySearchNode.board.isGoal()) {
+        complete = true;
         break; // initial board is not solvable
       }
 
-      processSearchNode(secondaryPQ, secondarySearchNode);
-      
-      numMoves++;
+      processSearchNode(secondaryPQ, secondarySearchNode, secondarySearchNode.numMoves + 1);
 
+    }
+
+    if (!complete) {
+      throw new IllegalArgumentException("Reached MAX_ITERS but failed to complete");
     }
 
   }
@@ -105,7 +107,7 @@ public class Solver {
    */
   public int moves() {
     if (isSolvable()) {
-      return numMoves;
+      return solutionStack.size() - 1;
     }
     return UNSOLVABLE;
   }
@@ -120,10 +122,14 @@ public class Solver {
     return null;
   }
 
-  private void processSearchNode(MinPQ<SearchNode> minPQ, SearchNode searchNode) {
+  /**
+   * Add <tt>searchNode</tt> to <tt>minPQ</tt> (and game tree) if <tt>searchNode</tt> is not equal
+   * to the previous search node.
+   */
+  private void processSearchNode(MinPQ<SearchNode> minPQ, SearchNode searchNode, int numMoves) {
     Iterable<Board> neighbors = searchNode.board.neighbors();
     for (Board board : neighbors) {
-      // add to minPQ if not equal to previousNode
+      // critical optimization: add to minPQ if not equal to previousNode
       if (searchNode.prevSearchNode != null && searchNode.prevSearchNode.board.equals(board)) {
         continue;
       }
@@ -138,9 +144,11 @@ public class Solver {
     Board board; // current board
     SearchNode prevSearchNode; // previous search Node
     int priority;
+    int numMoves;
 
     public SearchNode(Board board, int numMoves, SearchNode prevSearchNode) {
       this.board = board;
+      this.numMoves = numMoves;
       this.prevSearchNode = prevSearchNode;
       if (PRIORITY_FUNCTION_CHOICE == PriorityFunction.HAMMING) {
         priority = numMoves + board.hamming();
@@ -160,6 +168,9 @@ public class Solver {
    */
   public static void main(String[] args) {
 
+    if (args.length == 0) {
+      args = new String[]{"src/priorityqueues/kpuzzle/puzzle3x3-unsolvable.txt"};
+    }
     In in = new In(args[0]);
     int n = in.readInt();
     int[][] blocks = new int[n][n];
