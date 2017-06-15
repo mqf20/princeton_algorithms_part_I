@@ -45,7 +45,7 @@ public class Solver {
     MinPQ<SearchNode> primaryPQ = new MinPQ<SearchNode>();
     // See http://algs4.cs.princeton.edu/code/javadoc/edu/princeton/cs/algs4/MinPQ.html for MinPQ
     primaryPQ.insert(new SearchNode(initial, 0, null));
-    
+
     // ----- [] Prepare a secondary board in case initial board is unsolvable
 
     MinPQ<SearchNode> secondaryPQ = new MinPQ<SearchNode>();
@@ -53,11 +53,11 @@ public class Solver {
     secondaryPQ.insert(new SearchNode(twin, 0, null));
 
     // ----- [] Begin A* search algorithm
-    
+
     boolean complete = false;
 
     for (int i = 1; i <= MAX_ITERS; i++) {
-      
+
       // ----- [] Process primary
 
       SearchNode primarySearchNode = primaryPQ.delMin();
@@ -142,10 +142,10 @@ public class Solver {
    * Search Node helper class given in assignment.
    */
   private class SearchNode implements Comparable<SearchNode> {
-    Board board; // current board
-    SearchNode prevSearchNode; // previous search Node
-    int priority;
-    int numMoves;
+    private final Board board; // current board
+    private final SearchNode prevSearchNode; // previous search Node
+    private final int priority;
+    private final int numMoves;
 
     public SearchNode(Board board, int numMoves, SearchNode prevSearchNode) {
       this.board = board;
@@ -169,35 +169,30 @@ public class Solver {
    */
   public static void main(String[] args) {
 
-    try {
-      if (args.length == 0) {
-        args = new String[]{"src/priorityqueues/kpuzzle/puzzle2x2-unsolvable1.txt"};
+    if (args.length == 0) {
+      args = new String[] {"src/priorityqueues/kpuzzle/puzzle2x2-unsolvable1.txt"};
+    }
+    In in = new In(args[0]);
+    int n = in.readInt();
+    int[][] blocks = new int[n][n];
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
+        blocks[i][j] = in.readInt();
       }
-      In in = new In(args[0]);
-      int n = in.readInt();
-      int[][] blocks = new int[n][n];
-      for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-          blocks[i][j] = in.readInt();
-        }
+    }
+    Board initial = new Board(blocks);
+
+    Solver solver = new Solver(initial);
+
+    if (!solver.isSolvable()) {
+      StdOut.println("No solution possible");
+    } else {
+      StdOut.println("Minimum number of moves = " + solver.moves());
+      for (Board board : solver.solution()) {
+        StdOut.println(board);
       }
-      Board initial = new Board(blocks);
-
-      Solver solver = new Solver(initial);
-
-      if (!solver.isSolvable()) {
-        StdOut.println("No solution possible");
-      } else {
-        StdOut.println("Minimum number of moves = " + solver.moves());
-        for (Board board : solver.solution()) {
-          StdOut.println(board);
-        }
-      }
-
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
     }
 
-    }
+  }
 
 }
