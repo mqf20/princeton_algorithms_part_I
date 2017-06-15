@@ -15,14 +15,14 @@ public class Solver {
   /**
    * Constants
    */
-  public static final int UNSOLVABLE = -1; // implies that this board is unsolvable
-  public static final int MAX_ITERS = 100000;
+  private static final int UNSOLVABLE = -1; // implies that this board is unsolvable
+  private static final int MAX_ITERS = 100000;
 
-  public enum PriorityFunction {
+  private enum PriorityFunction {
     HAMMING, MANHATTAN;
   }
 
-  public static final PriorityFunction PRIORITY_FUNCTION_CHOICE = PriorityFunction.MANHATTAN;
+  private static final PriorityFunction PRIORITY_FUNCTION_CHOICE = PriorityFunction.MANHATTAN;
   // this is the priority function used by the A* search algorithm
 
   /**
@@ -49,7 +49,8 @@ public class Solver {
     // ----- [] Prepare a secondary board in case initial board is unsolvable
 
     MinPQ<SearchNode> secondaryPQ = new MinPQ<SearchNode>();
-    secondaryPQ.insert(new SearchNode(initial.twin(), 0, null));
+    Board twin = initial.twin();
+    secondaryPQ.insert(new SearchNode(twin, 0, null));
 
     // ----- [] Begin A* search algorithm
     
@@ -168,30 +169,35 @@ public class Solver {
    */
   public static void main(String[] args) {
 
-    if (args.length == 0) {
-      args = new String[]{"src/priorityqueues/kpuzzle/puzzle3x3-unsolvable.txt"};
-    }
-    In in = new In(args[0]);
-    int n = in.readInt();
-    int[][] blocks = new int[n][n];
-    for (int i = 0; i < n; i++) {
-      for (int j = 0; j < n; j++) {
-        blocks[i][j] = in.readInt();
+    try {
+      if (args.length == 0) {
+        args = new String[]{"src/priorityqueues/kpuzzle/puzzle2x2-unsolvable1.txt"};
       }
-    }
-    Board initial = new Board(blocks);
-
-    Solver solver = new Solver(initial);
-
-    if (!solver.isSolvable()) {
-      StdOut.println("No solution possible");
-    } else {
-      StdOut.println("Minimum number of moves = " + solver.moves());
-      for (Board board : solver.solution()) {
-        StdOut.println(board);
+      In in = new In(args[0]);
+      int n = in.readInt();
+      int[][] blocks = new int[n][n];
+      for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+          blocks[i][j] = in.readInt();
+        }
       }
+      Board initial = new Board(blocks);
+
+      Solver solver = new Solver(initial);
+
+      if (!solver.isSolvable()) {
+        StdOut.println("No solution possible");
+      } else {
+        StdOut.println("Minimum number of moves = " + solver.moves());
+        for (Board board : solver.solution()) {
+          StdOut.println(board);
+        }
+      }
+
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
     }
 
-  }
+    }
 
 }

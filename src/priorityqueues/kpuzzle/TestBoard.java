@@ -234,46 +234,6 @@ public class TestBoard {
     scanner.close();
   }
 
-  // ----- [] test hamming comparators
-
-  @Test
-  public void test_comparator_hamming1() {
-    Assert.assertTrue("board1 should have smaller hamming than board2",
-        Board.BY_HAMMING.compare(board1, board2) < 0);
-  }
-
-  @Test
-  public void test_comparator_hamming2() {
-    Assert.assertTrue("board3 should have larger hamming than board2",
-        Board.BY_HAMMING.compare(board3, board2) > 0);
-  }
-
-  @Test
-  public void test_comparator_hamming3() {
-    Assert.assertTrue("board should have same hamming as itself",
-        Board.BY_HAMMING.compare(board1, board1) == 0);
-  }
-
-  // ----- [] test manhattan comparators
-
-  @Test
-  public void test_comparator_manhattan1() {
-    Assert.assertTrue("board1 should have smaller manhattan than board2",
-        Board.BY_MANHATTAN.compare(board1, board2) < 0);
-  }
-
-  @Test
-  public void test_comparator_manhattan2() {
-    Assert.assertTrue("board3 should have larger manhattan than board2",
-        Board.BY_MANHATTAN.compare(board3, board2) > 0);
-  }
-
-  @Test
-  public void test_comparator_manhattan3() {
-    Assert.assertTrue("board should have same manhattan as itself",
-        Board.BY_MANHATTAN.compare(board1, board1) == 0);
-  }
-
   // ----- [] helper methods
 
   public static Board readBoard(String fileName) {

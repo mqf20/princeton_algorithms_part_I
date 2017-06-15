@@ -1,6 +1,5 @@
 package priorityqueues.kpuzzle;
 
-import java.util.Comparator;
 import java.util.Random;
 
 import edu.princeton.cs.algs4.Stack;
@@ -10,9 +9,6 @@ import edu.princeton.cs.algs4.Stack;
  * (https://class.coursera.org/algs4partI-010).
  */
 public class Board {
-
-  public static final Comparator<Board> BY_HAMMING = new ByHamming();
-  public static final Comparator<Board> BY_MANHATTAN = new ByManhattan();
 
   private int[][] blocks; // represents an n-by-n array of blocks
   private int dimension;
@@ -107,14 +103,18 @@ public class Board {
   public Board twin() {
 
     // Choose two blocks at random that are non-zero
-    int iRandom1 = 0;
-    int jRandom1 = 0;
-    int iRandom2 = 0;
-    int jRandom2 = 0;
-    while (blocks[iRandom1][jRandom1] == 0 || blocks[iRandom2][jRandom2] == 0) {
+    int iRandom1 = new Random().nextInt(dimension);
+    int jRandom1 = new Random().nextInt(dimension);
+    int iRandom2 = new Random().nextInt(dimension);
+    int jRandom2 = new Random().nextInt(dimension);
+    // keep trying to generate new random coordinates if:
+    // - the two pairs of coordinates are equal, or
+    // - either pair of coordinates point to an empty block (0)
+    while ((iRandom1 == iRandom2 && jRandom1 == jRandom2) || blocks[iRandom1][jRandom1] == 0
+        || blocks[iRandom2][jRandom2] == 0) {
       iRandom1 = new Random().nextInt(dimension);
-      iRandom2 = new Random().nextInt(dimension);
       jRandom1 = new Random().nextInt(dimension);
+      iRandom2 = new Random().nextInt(dimension);
       jRandom2 = new Random().nextInt(dimension);
     }
 
@@ -253,18 +253,6 @@ public class Board {
     int temp = tempBlocks[i1][j1];
     tempBlocks[i1][j1] = tempBlocks[i0][j0];
     tempBlocks[i0][j0] = temp;
-  }
-
-  private static class ByHamming implements Comparator<Board> {
-    public int compare(Board v, Board w) {
-      return v.hamming() - w.hamming();  // assume no danger of underflow
-    }
-  }
-
-  private static class ByManhattan implements Comparator<Board> {
-    public int compare(Board v, Board w) {
-      return v.manhattan() - w.manhattan();  // assume no danger of underflow
-    }
   }
 
 }
