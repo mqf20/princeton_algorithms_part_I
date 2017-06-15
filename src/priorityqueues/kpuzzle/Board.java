@@ -202,12 +202,15 @@ public class Board {
    */
   @Override
   public String toString() {
-    StringBuilder stringBuilder = new StringBuilder(Integer.toString(dimension));
+    StringBuilder stringBuilder = new StringBuilder();
+    int spacing = (int) Math.ceil(2 * Math.log10(dimension)) + 1;
+    String format = "%" + spacing + "d";
+    stringBuilder.append(dimension + "\n");
     for (int i = 0; i < dimension; i++) {
-      stringBuilder.append("\n");
       for (int j = 0; j < dimension; j++) {
-        stringBuilder.append(String.format("%2d", blocks[i][j]));
+        stringBuilder.append(String.format(format, blocks[i][j]));
       }
+      stringBuilder.append("\n");
     }
     return stringBuilder.toString();
   }
