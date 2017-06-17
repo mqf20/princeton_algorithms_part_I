@@ -17,8 +17,8 @@ ASSESSMENT DETAILS
 
 The following files were submitted:
 ----------------------------------
-7.3K Jun 17 09:17 Board.java
-5.3K Jun 17 09:17 Solver.java
+7.5K Jun 17 09:28 Board.java
+5.9K Jun 17 09:28 Solver.java
 
 
 ********************************************************************************
@@ -648,23 +648,24 @@ Maximum time allowed per puzzle is 10 seconds.
 
                filename   N    seconds    insert()            delMin()         max PQ size
 ---------------------------------------------------------------------------------------------
-=> passed  puzzle20.txt   3     0.18       1451                 859                 593         
-=> passed  puzzle21.txt   3     0.37       4131                2469                1663         
-=> passed  puzzle22.txt   3     0.19       2790                1654                1137         
-=> passed  puzzle23.txt   3     0.11       5189                3069                2121         
-=> passed  puzzle24.txt   3     0.12       5984                3638                2347         
-=> passed  puzzle25.txt   3     0.39      20577               12228                8350         
-=> passed  puzzle26.txt   3     0.13       6173                3701                2473         
-=> passed  puzzle27.txt   3     0.24      12711                7654                5058         
-=> passed  puzzle28.txt   3     1.18      45460               27023               18438         
-=> passed  puzzle29.txt   3     0.89      47361               28483               18879         
-=> passed  puzzle30.txt   3     0.76      40458               24373               16086         
-=> passed  puzzle31.txt   3     1.53      81870               49031               32840         
-=> passed  puzzle34.txt   4     6.22     196968               94688              102281         
-=> passed  puzzle37.txt   4     5.87     191098               91880               99219         
-=> passed  puzzle39.txt   4     2.82      91305               44660               46646         
-=> passed  puzzle41.txt   5     1.91      41777               17972               23806         
-=> passed  puzzle44.txt   5     7.37     158541               70626               87916         
+=> passed  puzzle20.txt   3     0.17       1101                 657                 445         
+=> passed  puzzle21.txt   3     0.17       1982                1172                 811         
+=> passed  puzzle22.txt   3     0.16       2022                1195                 828         
+=> passed  puzzle23.txt   3     0.27       6701                3954                2748         
+=> passed  puzzle24.txt   3     0.14       7119                4218                2902         
+=> passed  puzzle25.txt   3     0.24      11607                6898                4710         
+=> passed  puzzle26.txt   3     0.15       7355                4426                2930         
+=> passed  puzzle27.txt   3     0.19       9646                5856                3791         
+=> passed  puzzle28.txt   3     0.30      14886                9089                5798         
+=> passed  puzzle29.txt   3     0.51       9215                5658                3558         
+=> passed  puzzle30.txt   3     0.74      37255               22673               14583         
+=> passed  puzzle31.txt   3     2.50     127660               76540               51121         
+=> passed  puzzle34.txt   4     3.11      94307               45336               48972         
+=> passed  puzzle37.txt   4     1.88      38633               18627               20007         
+=> passed  puzzle39.txt   4     0.77      20903               10401               10503         
+=> passed  puzzle41.txt   5     0.72      14620                6283                8338         
+=> passed  puzzle44.txt   5     6.41     136695               61028               75668         
 ==> 17/17 tests passed
 
 Total: 17/17 tests passed!
+

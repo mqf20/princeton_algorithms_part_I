@@ -14,6 +14,7 @@ import edu.princeton.cs.algs4.StdOut;
  * <ul>
  * <li>Cache the Manhattan priority of a search node</li>
  * <li>Use only one PQ to run the A* search algorithm on the initial board and its twin</li>
+ * <li>Break ties using the manhattan or hamming distances (instead of priorities)</li>
  * </ul>
  */
 public class Solver {
@@ -38,7 +39,6 @@ public class Solver {
   private boolean solvable = false;
   private Board initial;
   
-
   /**
    * Accepts an initial board and finds a solution to this board.
    */
@@ -151,6 +151,7 @@ public class Solver {
   private class SearchNode implements Comparable<SearchNode> {
     private final Board board; // current board
     private final SearchNode prevSearchNode; // previous search Node
+    private final int hammingOrManhattan;
     private final int priority;
     private final int numMoves;
 
@@ -159,15 +160,21 @@ public class Solver {
       this.numMoves = numMoves;
       this.prevSearchNode = prevSearchNode;
       if (PRIORITY_FUNCTION_CHOICE == PriorityFunction.HAMMING) {
-        priority = numMoves + board.hamming();
+        hammingOrManhattan = board.hamming();
       } else {
-        priority = numMoves + board.manhattan();
+        hammingOrManhattan = board.manhattan();
       }
+      priority = numMoves + hammingOrManhattan;
     }
 
     @Override
     public int compareTo(SearchNode otherSearchNode) {
-      return Integer.compare(priority, otherSearchNode.priority);
+      int res = Integer.compare(priority, otherSearchNode.priority);
+      if (res == 0) {
+        // break ties by comparing manhattan or hamming distance
+        res = Integer.compare(hammingOrManhattan, otherSearchNode.hammingOrManhattan);
+      }
+      return res;
     }
   }
 
