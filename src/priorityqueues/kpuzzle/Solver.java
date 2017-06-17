@@ -9,6 +9,12 @@ import edu.princeton.cs.algs4.StdOut;
  * Solver from assignment of Week 4, Coursera Algorithms, Part I
  * (https://class.coursera.org/algs4partI-010) that solves a k-puzzle problem using the A* search
  * algorithm.
+ * 
+ * Optimizations:
+ * <ul>
+ * <li>Cache the Manhattan priority of a search node</li>
+ * <li>Use only one PQ to run the A* search algorithm on the initial board and its twin</li>
+ * </ul>
  */
 public class Solver {
 
@@ -30,6 +36,8 @@ public class Solver {
    */
   private Stack<Board> solutionStack = new Stack<Board>();
   private boolean solvable = false;
+  private Board initial;
+  
 
   /**
    * Accepts an initial board and finds a solution to this board.
@@ -39,54 +47,33 @@ public class Solver {
     if (initial == null) {
       throw new NullPointerException();
     }
+    this.initial = initial;
+
+    MinPQ<SearchNode> minPQ = new MinPQ<SearchNode>();
 
     // ----- [] Primary board
 
-    MinPQ<SearchNode> primaryPQ = new MinPQ<SearchNode>();
     // See http://algs4.cs.princeton.edu/code/javadoc/edu/princeton/cs/algs4/MinPQ.html for MinPQ
-    primaryPQ.insert(new SearchNode(initial, 0, null));
+    SearchNode primarySearchNode = new SearchNode(initial, 0, null);
+    minPQ.insert(primarySearchNode);
 
     // ----- [] Prepare a secondary board in case initial board is unsolvable
 
-    MinPQ<SearchNode> secondaryPQ = new MinPQ<SearchNode>();
     Board twin = initial.twin();
-    secondaryPQ.insert(new SearchNode(twin, 0, null));
+    SearchNode secondarySearchNode = new SearchNode(twin, 0, null);
+    minPQ.insert(secondarySearchNode);
 
     // ----- [] Begin A* search algorithm
 
     boolean complete = false;
 
     for (int i = 1; i <= MAX_ITERS; i++) {
-
-      // ----- [] Process primary
-
-      SearchNode primarySearchNode = primaryPQ.delMin();
-
-      if (primarySearchNode.board.isGoal()) {
+      SearchNode searchNode = minPQ.delMin();
+      if (checkIfGoal(minPQ, searchNode)) {
         complete = true;
-        solvable = true;
-        SearchNode searchNode = primarySearchNode;
-        // recover sequence of solution
-        while (searchNode != null) {
-          solutionStack.push(searchNode.board);
-          searchNode = searchNode.prevSearchNode;
-        }
         break;
       }
-
-      processSearchNode(primaryPQ, primarySearchNode, primarySearchNode.numMoves + 1);
-
-      // ----- [] Process secondary
-
-      SearchNode secondarySearchNode = secondaryPQ.delMin();
-
-      if (secondarySearchNode.board.isGoal()) {
-        complete = true;
-        break; // initial board is not solvable
-      }
-
-      processSearchNode(secondaryPQ, secondarySearchNode, secondarySearchNode.numMoves + 1);
-
+      processSearchNode(minPQ, searchNode, searchNode.numMoves + 1);
     }
 
     if (!complete) {
@@ -121,6 +108,26 @@ public class Solver {
       return solutionStack;
     }
     return null;
+  }
+  
+  private boolean checkIfGoal(MinPQ<SearchNode> minPQ, SearchNode searchNode) {
+    
+    SearchNode tempSearchNode = searchNode;
+    if (searchNode.board.isGoal()) {
+      // recover sequence of solution
+      while (searchNode != null) {
+        solutionStack.push(searchNode.board);
+        tempSearchNode = searchNode;
+        searchNode = searchNode.prevSearchNode;
+      }
+      if (tempSearchNode.board.equals(initial)) {
+        solvable = true;
+      }
+      return true;
+    }
+
+    return false;
+    
   }
 
   /**

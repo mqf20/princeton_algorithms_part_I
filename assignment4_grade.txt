@@ -8,17 +8,17 @@ Checkstyle:   PASSED
 
 Correctness:  42/42 tests passed
 Memory:       11/11 tests passed
-Timing:       16/17 tests passed
+Timing:       17/17 tests passed
 
-Aggregate score: 98.82%
+Aggregate score: 100.00%
 [Compilation: 5%, API: 5%, Findbugs: 0%, Checkstyle: 0%, Correctness: 60%, Memory: 10%, Timing: 20%]
 
 ASSESSMENT DETAILS
 
 The following files were submitted:
 ----------------------------------
-7.3K Jun 17 08:35 Board.java
-5.4K Jun 17 08:35 Solver.java
+7.3K Jun 17 09:17 Board.java
+5.3K Jun 17 09:17 Solver.java
 
 
 ********************************************************************************
@@ -611,19 +611,19 @@ Computing memory of Solver
 Running 3 total tests.
 
 Test 1: memory with puzzle20.txt (must be <= 2.0x reference solution)
-  - memory of student   Solver = 2416 bytes
+  - memory of student   Solver = 2424 bytes
   - memory of reference Solver = 4896 bytes
-  - student / reference        = 0.49
+  - student / reference        = 0.50
 ==> passed
 
 Test 2: memory with puzzle25.txt (must be <= 2.0x reference solution)
-  - memory of student   Solver = 2976 bytes
+  - memory of student   Solver = 2984 bytes
   - memory of reference Solver = 6056 bytes
   - student / reference        = 0.49
 ==> passed
 
 Test 3: memory with puzzle30.txt (must be <= 2.0x reference solution)
-  - memory of student   Solver = 3536 bytes
+  - memory of student   Solver = 3544 bytes
   - memory of reference Solver = 7216 bytes
   - student / reference        = 0.49
 ==> passed
@@ -648,26 +648,23 @@ Maximum time allowed per puzzle is 10 seconds.
 
                filename   N    seconds    insert()            delMin()         max PQ size
 ---------------------------------------------------------------------------------------------
-=> passed  puzzle20.txt   3     0.26       1968                1183                 786         
-=> passed  puzzle21.txt   3     0.36       5041                2983                2059         
-=> passed  puzzle22.txt   3     0.23       3971                2375                1597         
-=> passed  puzzle23.txt   3     0.20       7492                4429                3064         
-=> passed  puzzle24.txt   3     0.11       5637                3385                2253         
-=> passed  puzzle25.txt   3     0.20      10278                6121                4158         
-=> passed  puzzle26.txt   3     0.25      12677                7629                5049         
-=> passed  puzzle27.txt   3     0.15       7767                4703                3065         
-=> passed  puzzle28.txt   3     0.87      27547               16531               11017         
-=> passed  puzzle29.txt   3     0.43      22201               13495                8707         
-=> passed  puzzle30.txt   3     0.80      41603               24885               16719         
-=> passed  puzzle31.txt   3     0.82      42607               25785               16823         
-=> passed  puzzle34.txt   4     9.73     312481              149513              162969         
-=> passed  puzzle37.txt   4     8.10     258379              125577              132803         
-=> passed  puzzle39.txt   4     7.33     235351              115323              120029         
-=> passed  puzzle41.txt   5     5.68     122658               53091               69568         
-Aborting tests: puzzle44.txt took 13.150047938 seconds to complete.
-==> 16/17 tests passed
+=> passed  puzzle20.txt   3     0.18       1451                 859                 593         
+=> passed  puzzle21.txt   3     0.37       4131                2469                1663         
+=> passed  puzzle22.txt   3     0.19       2790                1654                1137         
+=> passed  puzzle23.txt   3     0.11       5189                3069                2121         
+=> passed  puzzle24.txt   3     0.12       5984                3638                2347         
+=> passed  puzzle25.txt   3     0.39      20577               12228                8350         
+=> passed  puzzle26.txt   3     0.13       6173                3701                2473         
+=> passed  puzzle27.txt   3     0.24      12711                7654                5058         
+=> passed  puzzle28.txt   3     1.18      45460               27023               18438         
+=> passed  puzzle29.txt   3     0.89      47361               28483               18879         
+=> passed  puzzle30.txt   3     0.76      40458               24373               16086         
+=> passed  puzzle31.txt   3     1.53      81870               49031               32840         
+=> passed  puzzle34.txt   4     6.22     196968               94688              102281         
+=> passed  puzzle37.txt   4     5.87     191098               91880               99219         
+=> passed  puzzle39.txt   4     2.82      91305               44660               46646         
+=> passed  puzzle41.txt   5     1.91      41777               17972               23806         
+=> passed  puzzle44.txt   5     7.37     158541               70626               87916         
+==> 17/17 tests passed
 
-Total: 16/17 tests passed!
-
-
-================================================================
+Total: 17/17 tests passed!

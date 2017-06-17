@@ -7,6 +7,12 @@ import edu.princeton.cs.algs4.Stack;
 /**
  * Board from assignment of Week 4, Coursera Algorithms, Part I
  * (https://class.coursera.org/algs4partI-010).
+ * 
+ * Optimizations:
+ * <ul>
+ * <li>Use a short[] array</li>
+ * <li>Use a 1d array instead of a 2d array</li>
+ * </ul>
  */
 public class Board {
 
