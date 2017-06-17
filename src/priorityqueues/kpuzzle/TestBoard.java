@@ -61,6 +61,18 @@ public class TestBoard {
     Assert.assertEquals("Wrong dimension", 3, board3.dimension());
   }
 
+  @Test
+  public void test_dimension10() {
+    Assert.assertEquals("Wrong dimension", 9,
+        readBoard("src/priorityqueues/kpuzzle/puzzle10.txt").dimension());
+  }
+
+  @Test
+  public void test_dimension10x10() {
+    Assert.assertEquals("Wrong dimension", 10,
+        readBoard("src/priorityqueues/kpuzzle/puzzle10x10.txt").dimension());
+  }
+
   // ----- [] test hamming()
 
   @Test
