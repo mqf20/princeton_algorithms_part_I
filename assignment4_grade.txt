@@ -17,8 +17,8 @@ ASSESSMENT DETAILS
 
 The following files were submitted:
 ----------------------------------
-7.1K Jun 15 01:16 Board.java
-5.4K Jun 15 01:16 Solver.java
+7.3K Jun 17 08:35 Board.java
+5.4K Jun 17 08:35 Solver.java
 
 
 ********************************************************************************
@@ -587,19 +587,19 @@ Memory usage of an n-by-n board
 
               n       student (bytes)    reference (bytes)
 ----------------------------------------------------------
-=> passed     4           248                  240
-=> passed     8           568                  560
-=> passed    12          1016                 1008
-=> passed    16          1592                 1584
-=> passed    20          2296                 2288
-=> passed    36          6392                 6384
-=> passed    72         23096                23088
-=> passed   120         61496                61488
+=> passed     4            88                  240
+=> passed     8           184                  560
+=> passed    12           344                 1008
+=> passed    16           568                 1584
+=> passed    20           856                 2288
+=> passed    36          2648                 6384
+=> passed    72         10424                23088
+=> passed   120         28856                61488
 ==> 8/8 tests passed
 
 Total: 8/8 tests passed!
 
-Student   memory = 4.00 n^2 + 32.00 n + 56.00   (R^2 = 1.000)
+Student   memory = 2.00 n^2 + 0.00 n + 56.00   (R^2 = 1.000)
 Reference memory = 4.00 n^2 + 32.00 n + 48.00   (R^2 = 1.000)
 
 ================================================================
@@ -611,21 +611,21 @@ Computing memory of Solver
 Running 3 total tests.
 
 Test 1: memory with puzzle20.txt (must be <= 2.0x reference solution)
-  - memory of student   Solver = 4936 bytes
+  - memory of student   Solver = 2416 bytes
   - memory of reference Solver = 4896 bytes
-  - student / reference        = 1.01
+  - student / reference        = 0.49
 ==> passed
 
 Test 2: memory with puzzle25.txt (must be <= 2.0x reference solution)
-  - memory of student   Solver = 6096 bytes
+  - memory of student   Solver = 2976 bytes
   - memory of reference Solver = 6056 bytes
-  - student / reference        = 1.01
+  - student / reference        = 0.49
 ==> passed
 
 Test 3: memory with puzzle30.txt (must be <= 2.0x reference solution)
-  - memory of student   Solver = 7256 bytes
+  - memory of student   Solver = 3536 bytes
   - memory of reference Solver = 7216 bytes
-  - student / reference        = 1.01
+  - student / reference        = 0.49
 ==> passed
 
 
@@ -648,23 +648,23 @@ Maximum time allowed per puzzle is 10 seconds.
 
                filename   N    seconds    insert()            delMin()         max PQ size
 ---------------------------------------------------------------------------------------------
-=> passed  puzzle20.txt   3     0.21       1995                1183                 813         
-=> passed  puzzle21.txt   3     0.35       5019                2983                2037         
-=> passed  puzzle22.txt   3     0.14       3982                2375                1608         
-=> passed  puzzle23.txt   3     0.15       7475                4429                3047         
-=> passed  puzzle24.txt   3     0.12       5606                3385                2222         
-=> passed  puzzle25.txt   3     0.20      10326                6121                4206         
-=> passed  puzzle26.txt   3     0.25      12604                7629                4976         
-=> passed  puzzle27.txt   3     0.15       7773                4703                3071         
-=> passed  puzzle28.txt   3     0.85      27507               16531               10977         
-=> passed  puzzle29.txt   3     0.44      22501               13495                9007         
-=> passed  puzzle30.txt   3     0.81      41467               24885               16583         
-=> passed  puzzle31.txt   3     0.83      42607               25785               16823         
-=> passed  puzzle34.txt   4     9.89     305256              149513              155744         
-=> passed  puzzle37.txt   4     8.15     259983              125577              134407         
-=> passed  puzzle39.txt   4     7.77     233620              115323              118298         
-=> passed  puzzle41.txt   5     5.76     122388               53091               69298         
-Aborting tests: puzzle44.txt took 13.390038963 seconds to complete.
+=> passed  puzzle20.txt   3     0.26       1968                1183                 786         
+=> passed  puzzle21.txt   3     0.36       5041                2983                2059         
+=> passed  puzzle22.txt   3     0.23       3971                2375                1597         
+=> passed  puzzle23.txt   3     0.20       7492                4429                3064         
+=> passed  puzzle24.txt   3     0.11       5637                3385                2253         
+=> passed  puzzle25.txt   3     0.20      10278                6121                4158         
+=> passed  puzzle26.txt   3     0.25      12677                7629                5049         
+=> passed  puzzle27.txt   3     0.15       7767                4703                3065         
+=> passed  puzzle28.txt   3     0.87      27547               16531               11017         
+=> passed  puzzle29.txt   3     0.43      22201               13495                8707         
+=> passed  puzzle30.txt   3     0.80      41603               24885               16719         
+=> passed  puzzle31.txt   3     0.82      42607               25785               16823         
+=> passed  puzzle34.txt   4     9.73     312481              149513              162969         
+=> passed  puzzle37.txt   4     8.10     258379              125577              132803         
+=> passed  puzzle39.txt   4     7.33     235351              115323              120029         
+=> passed  puzzle41.txt   5     5.68     122658               53091               69568         
+Aborting tests: puzzle44.txt took 13.150047938 seconds to complete.
 ==> 16/17 tests passed
 
 Total: 16/17 tests passed!
