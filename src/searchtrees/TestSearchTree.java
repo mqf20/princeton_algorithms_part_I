@@ -49,4 +49,40 @@ public class TestSearchTree {
 
   }
 
+  @Test
+  public void testRedBlackBST() {
+
+    RedBlackBST<Character, Integer> redBlackBST = new RedBlackBST<>();
+    
+    // Test put()
+    redBlackBST.put('E', 1);
+    redBlackBST.put('A', 1);
+    redBlackBST.put('M', 1);
+    redBlackBST.put('C', 1);
+    redBlackBST.put('X', 1);
+    redBlackBST.put('S', 1);
+    redBlackBST.put('R', 1);
+    redBlackBST.put('H', 1);
+    
+    // Test floor()
+    Assert.assertEquals("Floor should be E", new Character('E'), redBlackBST.floor('G'));
+
+    // Test delete()
+    redBlackBST.delete('H');
+    
+    // Test keys()
+    Character c_prev = null;
+    int count = 0;
+    for (Character c : redBlackBST.keys()) {
+      if (c_prev != null) {
+        Assert.assertTrue(c_prev.compareTo(c) < 0);
+      }
+      c_prev = c;
+      count++;
+    }
+    
+    Assert.assertEquals("There should be 7 elements", 7, count);
+
+  }
+
 }
