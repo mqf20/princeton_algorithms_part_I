@@ -20,7 +20,10 @@ import edu.princeton.cs.algs4.StdDraw;
 public class NearestNeighborVisualizer {
 
     public static void main(String[] args) {
-        String filename = args[0];
+        String filename = "src/searchtrees/kdtrees/circle10.txt";
+        if (args.length > 0) {
+            filename = args[0];
+        }
         In in = new In(filename);
 
         StdDraw.enableDoubleBuffering();
