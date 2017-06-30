@@ -23,7 +23,7 @@ public class ElementaryBinarySearchTree<Key extends Comparable<Key>, Value> {
     }
 
     if (value == null) {
-      throw new IllegalArgumentException("Invalid value");
+      delete(key);
     }
 
     root = put(root, key, value);
