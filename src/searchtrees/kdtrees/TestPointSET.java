@@ -110,7 +110,7 @@ public class TestPointSET {
 
   @Test
   public void test_nearest1() {
-    Assert.assertEquals(new Point2D(0.793893, 0.904508), pointSET.nearest(new Point2D(1.0, 1.0)));
+    Assert.assertEquals(new Point2D(0.793893, 0.904508), pointSET10.nearest(new Point2D(1.0, 1.0)));
   }
 
   private PointSET readInputFile(String filename) {

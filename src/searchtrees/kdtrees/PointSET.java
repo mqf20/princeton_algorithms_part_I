@@ -98,11 +98,12 @@ public class PointSET {
       if (closestPoint != null) {
         if (distanceSquared < closestDistanceSquared) {
           closestPoint = point2D;
+          closestDistanceSquared = distanceSquared;
         }
       } else {
         closestPoint = point2D;
+        closestDistanceSquared = distanceSquared;
       }
-      closestDistanceSquared = distanceSquared;
     }
     return closestPoint;
   }
