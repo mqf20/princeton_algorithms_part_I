@@ -90,6 +90,16 @@ public class TestPointSET2 {
     Assert.assertEquals(count, 2);
   }
 
+  @Test
+  public void test_range_empty() {
+    Iterable<Point2D> pointsInside = pointSET2.range(new RectHV(0.0, -2.0, 2.0, 0.0));
+    int count = 0;
+    for (Point2D point2D : pointsInside) {
+      count++;
+    }
+    Assert.assertEquals(count, 0);
+  }
+
   @Test(expected = NullPointerException.class)
   public void test_nearest_null() {
     pointSET2.nearest(null);
