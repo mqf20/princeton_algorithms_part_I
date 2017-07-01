@@ -5,22 +5,24 @@ import java.util.List;
 
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
+import edu.princeton.cs.algs4.RedBlackBST;
 
 /**
- * Representation of a set of points in the unit square (brute-force implementation).
+ * Representation of a set of points in the unit square (brute-force implementation using red-black
+ * BST).
  * 
  * From assignment of Week 5, Coursera Algorithms, Part I
  * (https://class.coursera.org/algs4partI-010).
  */
 public class PointSET {
 
-  List<Point2D> points;
+  RedBlackBST<Integer, Point2D> points;
 
   /**
    * Construct an empty set of points
    */
   public PointSET() {
-    points = new ArrayList<Point2D>();
+    points = new RedBlackBST<Integer, Point2D>();
   }
 
   /**
@@ -45,7 +47,7 @@ public class PointSET {
       throw new NullPointerException();
     }
     if (!contains(p)) {
-      points.add(p);
+      points.put(p.hashCode(), p);
     }
   }
 
@@ -56,15 +58,15 @@ public class PointSET {
     if (p == null) {
       throw new NullPointerException();
     }
-    return points.contains(p);
+    return points.contains(p.hashCode());
   }
 
   /**
    * Draw all points to standard draw.
    */
   public void draw() {
-    for (Point2D point2D : points) {
-      point2D.draw();
+    for (Integer hashCode : points.keys()) {
+      points.get(hashCode).draw();
     }
   }
 
@@ -76,7 +78,8 @@ public class PointSET {
       throw new NullPointerException();
     }
     List<Point2D> pointsInside = new ArrayList<Point2D>();
-    for (Point2D point2D : points) {
+    for (Integer hashCode : points.keys()) {
+      Point2D point2D = points.get(hashCode);
       if (rect.contains(point2D)) {
         pointsInside.add(point2D);
       }
@@ -93,7 +96,8 @@ public class PointSET {
     }
     Point2D closestPoint = null;
     double closestDistanceSquared = Double.POSITIVE_INFINITY;
-    for (Point2D point2D : points) {
+    for (Integer hashCode : points.keys()) {
+      Point2D point2D = points.get(hashCode);
       double distanceSquared = point2D.distanceSquaredTo(p);
       if (closestPoint != null) {
         if (distanceSquared < closestDistanceSquared) {
