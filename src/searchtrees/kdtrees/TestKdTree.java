@@ -115,18 +115,14 @@ public class TestKdTree {
     Assert.assertEquals(count, 0);
   }
 
-  @Test(expected = NullPointerException.class)
-  public void test_nearest_null() {
-    kdTree.nearest(null);
-  }
-
-  /*
   @Test
   public void test_nearest() {
     kdTree.insert(new Point2D(0.0, 0.0));
-    kdTree.insert(new Point2D(1.0, -1.0));
+    kdTree.insert(new Point2D(1.0, 1.0));
+    kdTree.insert(new Point2D(0.1, 0.1));
+    kdTree.insert(new Point2D(0.2, 0.2));
     kdTree.insert(new Point2D(-0.0, -0.0)); // duplicated
-    Assert.assertEquals(new Point2D(0.0, 0.0), kdTree.nearest(new Point2D(-5.0, 5.0)));
+    Assert.assertEquals(new Point2D(1.0, 1.0), kdTree.nearest(new Point2D(0.75, 0.75)));
   }
 
   @Test
@@ -138,7 +134,6 @@ public class TestKdTree {
   public void test_nearest1() {
     Assert.assertEquals(new Point2D(0.793893, 0.904508), kdTree_10.nearest(new Point2D(1.0, 1.0)));
   }
-  */
 
   private KdTree readInputFile(String filename) {
 

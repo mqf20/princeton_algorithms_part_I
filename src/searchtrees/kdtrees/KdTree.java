@@ -17,8 +17,7 @@ public class KdTree {
   /**
    * Constants
    */
-  private final double EPS = 10e-8; // tolerance for comparison
-  private final RectHV BOUNDARY = new RectHV(0.0, 0.0, 1.0, 1.0); // boundary is unit square
+  private static final RectHV BOUNDARY = new RectHV(0.0, 0.0, 1.0, 1.0); // boundary is unit square
 
   /**
    * Class variables
@@ -50,9 +49,6 @@ public class KdTree {
    * Add the point to the set (if it is not already in the set). Same as put().
    */
   public void insert(Point2D p) {
-    if (p == null) {
-      throw new NullPointerException();
-    }
     if (!BOUNDARY.contains(p)) {
       throw new IllegalArgumentException("Only points in unit square are allowed");
     }
@@ -63,9 +59,6 @@ public class KdTree {
    * Does the set contain point p? p must be in the unit square.
    */
   public boolean contains(Point2D p) {
-    if (p == null) {
-      throw new NullPointerException();
-    }
     if (!BOUNDARY.contains(p)) {
       throw new IllegalArgumentException("Only points in unit square are allowed");
     }
@@ -78,12 +71,16 @@ public class KdTree {
       } else {
         cmp = p.y() - x.point2D.y(); // compare using y coordinates
       }
-      if (Math.abs(cmp) < EPS) { // a match
-        break;
-      } else if (cmp < 0) {
+      if (cmp < 0) {
         x = x.left;
       } else {
-        x = x.right;
+        if (x.point2D.equals(p)) {
+          break;  // a match
+        } else {
+          // go right if x or y coordinate is equal or larger (handles "degenerate" cases:
+          // e.g. when all points have the same x-coordinate)
+          x = x.right;
+        }
       }
     }
     return x != null;
@@ -100,9 +97,6 @@ public class KdTree {
    * All points that are inside the rectangle (rectangle must be contained within unit square).
    */
   public Iterable<Point2D> range(RectHV rect) {
-    if (rect == null) {
-      throw new NullPointerException();
-    }
     if (!BOUNDARY.contains(new Point2D(rect.xmin(), rect.ymin()))
         || !BOUNDARY.contains(new Point2D(rect.xmax(), rect.ymax()))) {
       throw new IllegalArgumentException("rectangle must be contained within unit square");
@@ -117,9 +111,6 @@ public class KdTree {
    * A nearest neighbor in the set to point p; <tt>null</tt> if the set is empty.
    */
   public Point2D nearest(Point2D p) {
-    if (p == null) {
-      throw new NullPointerException();
-    }
     if (root == null) {
       return null;
     }
@@ -163,13 +154,17 @@ public class KdTree {
     } else {
       cmp = point2D.y() - x.point2D.y(); // compare using y coordinates
     }
-    if (Math.abs(cmp) < EPS) { // a match
-      x.point2D = point2D; // overwrite
-    } else if (cmp < 0) { // go left if x or y coordinate is smaller
+    if (cmp < 0) { // go left if x or y coordinate is smaller
       x.left = insert(x.left, point2D, !useXCoordinate);
-    } else { // go right if x or y coordinate is larger
-      x.right = insert(x.right, point2D, !useXCoordinate);
-    }
+    } else { 
+      if (x.point2D.equals(point2D)) {
+        x.point2D = point2D; // overwrite if points are the same
+      } else {
+        // go right if x or y coordinate is equal or larger (handles "degenerate" cases:
+        // e.g. when all points have the same x-coordinate)
+        x.right = insert(x.right, point2D, !useXCoordinate);
+      }
+    } 
     x.count = 1 + size(x.left) + size(x.right); // update count
     return x;
   }
@@ -204,38 +199,38 @@ public class KdTree {
 
     // ----- [] Compute rectangles corresponding to the children of x.
 
-    RectHV rect_left_bottom; // left or bottom rect
-    RectHV rect_right_top; // right or top rect
+    RectHV rectLeftBottom; // left or bottom rect
+    RectHV rectRightTop; // right or top rect
     if (useXCoordinate) {
-      rect_left_bottom =
+      rectLeftBottom =
           new RectHV(boundary.xmin(), boundary.ymin(), x.point2D.x(), boundary.ymax());
-      rect_right_top = new RectHV(x.point2D.x(), boundary.ymin(), boundary.xmax(), boundary.ymax());
+      rectRightTop = new RectHV(x.point2D.x(), boundary.ymin(), boundary.xmax(), boundary.ymax());
     } else {
-      rect_left_bottom =
+      rectLeftBottom =
           new RectHV(boundary.xmin(), boundary.ymin(), boundary.xmax(), x.point2D.y());
-      rect_right_top = new RectHV(boundary.xmin(), x.point2D.y(), boundary.xmax(), boundary.ymax());
+      rectRightTop = new RectHV(boundary.xmin(), x.point2D.y(), boundary.xmax(), boundary.ymax());
     }
-    
-    // ----- [] Optimization: only search child sub-trees if query rectangle intersects the 
-    //          rectangle corresponding to the child of x.
-    if (rect.intersects(rect_left_bottom)) { // go left or bottom
-      range(x.left, rect, pointsInside, !useXCoordinate, rect_left_bottom);
+
+    // ----- [] Optimization: only search child sub-trees if query rectangle intersects the
+    // rectangle corresponding to the child of x.
+    if (rect.intersects(rectLeftBottom)) { // go left or bottom
+      range(x.left, rect, pointsInside, !useXCoordinate, rectLeftBottom);
     }
-    if (rect.intersects(rect_right_top)) { // go right or top
-      range(x.right, rect, pointsInside, !useXCoordinate, rect_right_top);
+    if (rect.intersects(rectRightTop)) { // go right or top
+      range(x.right, rect, pointsInside, !useXCoordinate, rectRightTop);
     }
 
   }
 
   private class NearestPoint {
-    private Point2D p;
+    private final Point2D p;
     private Node nearestNodeSoFar = root;
     private double nearestDistance;
 
     public NearestPoint(Point2D p) {
       this.p = p;
       nearestDistance = nearestNodeSoFar.point2D.distanceSquaredTo(p);
-      findNearest(root, BOUNDARY, true);  // start from root
+      findNearest(root, BOUNDARY, true); // start from root
     }
 
     /**
@@ -246,67 +241,79 @@ public class KdTree {
       if (x == null) {
         return;
       }
-      
+
       // ----- [] Update closest point and distance
-      
+
       double currentDist = x.point2D.distanceSquaredTo(p);
       if (currentDist < nearestDistance) {
         nearestNodeSoFar = x;
         nearestDistance = currentDist;
       }
-      
+
       // ----- [] Compute rectangles corresponding to the children of x.
 
-      RectHV rect_left_bottom; // left or bottom rect
-      RectHV rect_right_top; // right or top rect
+      RectHV rectLeftBottom; // left or bottom rect
+      RectHV rectRightTop; // right or top rect
 
       if (useXCoordinate) {
-        rect_left_bottom =
+        rectLeftBottom =
             new RectHV(boundary.xmin(), boundary.ymin(), x.point2D.x(), boundary.ymax());
-        rect_right_top = new RectHV(x.point2D.x(), boundary.ymin(), boundary.xmax(), boundary.ymax());
+        rectRightTop =
+            new RectHV(x.point2D.x(), boundary.ymin(), boundary.xmax(), boundary.ymax());
       } else {
-        rect_left_bottom =
+        rectLeftBottom =
             new RectHV(boundary.xmin(), boundary.ymin(), boundary.xmax(), x.point2D.y());
-        rect_right_top = new RectHV(boundary.xmin(), x.point2D.y(), boundary.xmax(), boundary.ymax());
+        rectRightTop =
+            new RectHV(boundary.xmin(), x.point2D.y(), boundary.xmax(), boundary.ymax());
       }
-      
-      // ----- [] Optimization: no need to search subtree if the closest point discovered so far is 
-      //          closer than the distance between p and the rectangle corresponding to child of x.
 
-      double dist_to_rect_left_bottom = rect_left_bottom.distanceSquaredTo(p);
-      double dist_to_rect_right_top = rect_right_top.distanceSquaredTo(p);
-      
+      // ----- [] Optimization: no need to search subtree if the closest point discovered so far is
+      // closer than the distance between p and the rectangle corresponding to child of x.
+
+      double distToRectLeftBottom = rectLeftBottom.distanceSquaredTo(p);
+      double distToRectRightTop = rectRightTop.distanceSquaredTo(p);
+
       boolean searchLeft = false;
       boolean searchRight = false;
-      
-      if (dist_to_rect_left_bottom < nearestDistance) {
+
+      if (distToRectLeftBottom < nearestDistance) {
         // search left subtree
         searchLeft = true;
       }
-      
-      if (dist_to_rect_right_top < nearestDistance) {
+
+      if (distToRectRightTop < nearestDistance) {
         // search right subtree
         searchRight = true;
       }
-      
-      if (searchLeft && searchRight) {
-        // ----- [] Optimization: if we have to search both subtrees, search the one that is on the
-        //          same side of the splitting line as p first.
-        
-        // TODO : complete logic
-        
 
+      if (searchLeft && searchRight) {
+
+        // ----- [] Optimization: if we have to search both subtrees, search the one that is on the
+        // same side of the splitting line as p first.
+
+        if ((useXCoordinate && (x.point2D.x() <= p.x()))
+            || (!useXCoordinate && (x.point2D.y() <= p.y()))) {
+          // use left or bottom side of splitting line first
+          findNearest(x.left, rectLeftBottom, !useXCoordinate);
+          findNearest(x.right, rectRightTop, !useXCoordinate);
+        } else {
+          // use right or top side of splitting line first
+          findNearest(x.right, rectRightTop, !useXCoordinate);
+          findNearest(x.left, rectLeftBottom, !useXCoordinate);
+        }
+
+      } else {
+        
+        if (searchLeft) {
+          findNearest(x.left, rectLeftBottom, !useXCoordinate);
+        } else if (searchRight) {
+          findNearest(x.right, rectRightTop, !useXCoordinate);
+        }
+        
       }
-      
 
     }
 
   }
-
-  public static void main(String[] args) {
-    RectHV rect = new RectHV(0, 0, 1, 1);
-    double dist = rect.distanceTo(new Point2D(0.5, 0.5));
-    System.out.println(">> " + dist);
-  }
-
+  
 }
