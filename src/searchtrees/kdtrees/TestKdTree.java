@@ -18,12 +18,6 @@ public class TestKdTree {
     Assert.assertTrue("kdTree should be empty", kdTree.isEmpty());
   }
 
-  @Test(expected = NullPointerException.class)
-  public void test_insert_null() {
-    KdTree kdTree = new KdTree();
-    kdTree.insert(null);
-  }
-
   @Test
   public void test_insert() {
     KdTree kdTree = new KdTree();
@@ -70,12 +64,6 @@ public class TestKdTree {
   public void test_draw() {
     KdTree kdTree = new KdTree();
     kdTree.draw();
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void test_range_null() {
-    KdTree kdTree = new KdTree();
-    kdTree.range(null);
   }
 
   @Test
