@@ -5,7 +5,7 @@ import java.util.List;
 
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
-import edu.princeton.cs.algs4.RedBlackBST;
+import edu.princeton.cs.algs4.SET;
 
 /**
  * Representation of a set of points in the unit square (brute-force implementation using red-black
@@ -16,13 +16,16 @@ import edu.princeton.cs.algs4.RedBlackBST;
  */
 public class PointSET {
 
-  RedBlackBST<Integer, Point2D> points;
+  /**
+   * Class variables
+   */
+  private final SET<Point2D> points;
 
   /**
    * Construct an empty set of points
    */
   public PointSET() {
-    points = new RedBlackBST<Integer, Point2D>();
+    points = new SET<Point2D>();
   }
 
   /**
@@ -43,11 +46,8 @@ public class PointSET {
    * Add the point to the set (if it is not already in the set).
    */
   public void insert(Point2D p) {
-    if (p == null) {
-      throw new NullPointerException();
-    }
     if (!contains(p)) {
-      points.put(p.hashCode(), p);
+      points.add(p);
     }
   }
 
@@ -55,18 +55,15 @@ public class PointSET {
    * Does the set contain point p?
    */
   public boolean contains(Point2D p) {
-    if (p == null) {
-      throw new NullPointerException();
-    }
-    return points.contains(p.hashCode());
+    return points.contains(p);
   }
 
   /**
    * Draw all points to standard draw.
    */
   public void draw() {
-    for (Integer hashCode : points.keys()) {
-      points.get(hashCode).draw();
+    for (Point2D point2D : points) {
+      point2D.draw();
     }
   }
 
@@ -74,12 +71,8 @@ public class PointSET {
    * All points that are inside the rectangle.
    */
   public Iterable<Point2D> range(RectHV rect) {
-    if (rect == null) {
-      throw new NullPointerException();
-    }
     List<Point2D> pointsInside = new ArrayList<Point2D>();
-    for (Integer hashCode : points.keys()) {
-      Point2D point2D = points.get(hashCode);
+    for (Point2D point2D : points) {
       if (rect.contains(point2D)) {
         pointsInside.add(point2D);
       }
@@ -91,13 +84,9 @@ public class PointSET {
    * A nearest neighbor in the set to point p; <tt>null</tt> if the set is empty.
    */
   public Point2D nearest(Point2D p) {
-    if (p == null) {
-      throw new NullPointerException();
-    }
     Point2D closestPoint = null;
     double closestDistanceSquared = Double.POSITIVE_INFINITY;
-    for (Integer hashCode : points.keys()) {
-      Point2D point2D = points.get(hashCode);
+    for (Point2D point2D : points) {
       double distanceSquared = point2D.distanceSquaredTo(p);
       if (closestPoint != null) {
         if (distanceSquared < closestDistanceSquared) {

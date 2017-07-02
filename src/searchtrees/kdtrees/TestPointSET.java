@@ -20,11 +20,6 @@ public class TestPointSET {
     Assert.assertTrue("pointSET should be empty", pointSET.isEmpty());
   }
 
-  @Test(expected = NullPointerException.class)
-  public void test_insert_null() {
-    pointSET.insert(null);
-  }
-
   @Test
   public void test_insert() {
     pointSET.insert(new Point2D(0.0, 0.0));
@@ -44,11 +39,6 @@ public class TestPointSET {
     pointSET.insert(new Point2D(1.0, -1.0));
     pointSET.insert(new Point2D(-0.0, -0.0)); // duplicated
     Assert.assertEquals("Should have 2 points (duplicate not accepted)", 2, pointSET.size());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void test_contains_null() {
-    pointSET.contains(null);
   }
 
   @Test
@@ -72,11 +62,6 @@ public class TestPointSET {
     pointSET.draw();
   }
 
-  @Test(expected = NullPointerException.class)
-  public void test_range_null() {
-    pointSET.range(null);
-  }
-
   @Test
   public void test_range() {
     pointSET.insert(new Point2D(0.0, 0.0));
@@ -98,11 +83,6 @@ public class TestPointSET {
       count++;
     }
     Assert.assertEquals(count, 0);
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void test_nearest_null() {
-    pointSET.nearest(null);
   }
 
   @Test
