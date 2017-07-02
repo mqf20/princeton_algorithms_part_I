@@ -228,53 +228,57 @@ public class KdTree {
     /**
      * Recursive search for the closest node to p.
      */
-    private void findNearest(Node x, RectHV boundary, boolean useXCoordinate) {
+    private void findNearest(Node queryPoint, RectHV boundary, boolean useXCoordinate) {
 
-      if (x == null) {
+      if (queryPoint == null) {
         return;
       }
+      
+      double queryPointX = queryPoint.point2D.x();
+      double queryPointY = queryPoint.point2D.y();
 
       // ----- [] Update closest point and distance
 
-      double currentDist = x.point2D.distanceSquaredTo(p);
+      double currentDist = queryPoint.point2D.distanceSquaredTo(p);
       if (currentDist < nearestDistance) {
-        nearestNodeSoFar = x;
+        nearestNodeSoFar = queryPoint;
         nearestDistance = currentDist;
       }
 
-      // ----- [] Compute rectangles corresponding to the children of x.
+      // ----- [] Compute rectangles corresponding to the children of queryPoint.
 
       RectHV rectLeftBottom; // left or bottom rect
-      double distSquaredToRectLeftBottom;
       RectHV rectRightTop; // right or top rect
-      double distSquaredToRectRightTop;
+      double boundaryXMin = boundary.xmin();
+      double boundaryYMin = boundary.ymin();
+      double boundaryXMax = boundary.xmax();
+      double boundaryYMax = boundary.ymax();
 
-      double temp;
       if (useXCoordinate) {
-        temp = Math.pow(p.x() - x.point2D.x(), 2);
-        rectLeftBottom = new RectHV(boundary.xmin(), boundary.ymin(), x.point2D.x(), boundary.ymax());
-        rectRightTop = new RectHV(x.point2D.x(), boundary.ymin(), boundary.xmax(), boundary.ymax());
+        rectLeftBottom =
+            new RectHV(boundaryXMin, boundaryYMin, queryPointX, boundaryYMax);
+        rectRightTop = new RectHV(queryPointX, boundaryYMin, boundaryXMax, boundaryYMax);
       } else {
-        temp = Math.pow(p.y() - x.point2D.y(), 2);
-        rectLeftBottom = new RectHV(boundary.xmin(), boundary.ymin(), boundary.xmax(), x.point2D.y());
-        rectRightTop = new RectHV(boundary.xmin(), x.point2D.y(), boundary.xmax(), boundary.ymax());
+        rectLeftBottom =
+            new RectHV(boundaryXMin, boundaryYMin, boundaryXMax, queryPointY);
+        rectRightTop = new RectHV(boundaryXMin, queryPointY, boundaryXMax, boundaryYMax);
       }
 
       // ----- [] Optimization: no need to search subtree if the closest point discovered so far is
-      // closer than the distance between p and the rectangle corresponding to child of x.
+      // closer than the distance between p and the rectangle corresponding to child of queryPoint.
+
+      double distToRectLeftBottom = rectLeftBottom.distanceSquaredTo(p);
+      double distToRectRightTop = rectRightTop.distanceSquaredTo(p);
 
       boolean searchLeft = false;
       boolean searchRight = false;
 
-      distSquaredToRectLeftBottom = rectLeftBottom.contains(p) ? 0 : temp;
-      distSquaredToRectRightTop = rectRightTop.contains(p) ? 0 : temp;
-
-      if (distSquaredToRectLeftBottom < nearestDistance) {
+      if (distToRectLeftBottom < nearestDistance) {
         // search left subtree
         searchLeft = true;
       }
 
-      if (distSquaredToRectRightTop < nearestDistance) {
+      if (distToRectRightTop < nearestDistance) {
         // search right subtree
         searchRight = true;
       }
@@ -284,23 +288,23 @@ public class KdTree {
         // ----- [] Optimization: if we have to search both subtrees, search the one that is on the
         // same side of the splitting line as p first.
 
-        if ((useXCoordinate && (x.point2D.x() <= p.x()))
-            || (!useXCoordinate && (x.point2D.y() <= p.y()))) {
+        if ((useXCoordinate && (queryPointX < p.x()))
+            || (!useXCoordinate && (queryPointY < p.y()))) {
           // use left or bottom side of splitting line first
-          findNearest(x.left, rectLeftBottom, !useXCoordinate);  // order is important
-          findNearest(x.right, rectRightTop, !useXCoordinate);
+          findNearest(queryPoint.left, rectLeftBottom, !useXCoordinate);  // order is important
+          findNearest(queryPoint.right, rectRightTop, !useXCoordinate);
         } else {
           // use right or top side of splitting line first
-          findNearest(x.right, rectRightTop, !useXCoordinate);  // order is important
-          findNearest(x.left, rectLeftBottom, !useXCoordinate);
+          findNearest(queryPoint.right, rectRightTop, !useXCoordinate);  // order is important
+          findNearest(queryPoint.left, rectLeftBottom, !useXCoordinate);
         }
 
       } else {
 
         if (searchLeft) {
-          findNearest(x.left, rectLeftBottom, !useXCoordinate);
+          findNearest(queryPoint.left, rectLeftBottom, !useXCoordinate);
         } else if (searchRight) {
-          findNearest(x.right, rectRightTop, !useXCoordinate);
+          findNearest(queryPoint.right, rectRightTop, !useXCoordinate);
         }
 
       }
