@@ -117,7 +117,7 @@ public class KdTree {
    * Node for a 2d-tree that is based on a elementary binary search tree.
    */
   private class Node {
-    private Point2D point2D;
+    private final Point2D point2D;
     private Node left, right;
     private int count;
 
