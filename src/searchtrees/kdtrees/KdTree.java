@@ -49,9 +49,7 @@ public class KdTree {
    * Add the point to the set (if it is not already in the set). Same as put().
    */
   public void insert(Point2D p) {
-    if (!BOUNDARY.contains(p)) {
-      throw new IllegalArgumentException("Only points in unit square are allowed");
-    }
+    assert (BOUNDARY.contains(p));
     root = insert(root, p, true);
   }
 
@@ -59,12 +57,12 @@ public class KdTree {
    * Does the set contain point p? p must be in the unit square.
    */
   public boolean contains(Point2D p) {
-    if (!BOUNDARY.contains(p)) {
-      throw new IllegalArgumentException("Only points in unit square are allowed");
-    }
     Node x = root;
     boolean useXCoordinate = true;
     while (x != null) {
+      if (x.point2D.equals(p)) {
+        return true;
+      }
       double cmp;
       if (useXCoordinate) {
         cmp = p.x() - x.point2D.x(); // compare using x coordinates
@@ -74,16 +72,14 @@ public class KdTree {
       if (cmp < 0) {
         x = x.left;
       } else {
-        if (x.point2D.equals(p)) {
-          break;  // a match
-        } else {
-          // go right if x or y coordinate is equal or larger (handles "degenerate" cases:
-          // e.g. when all points have the same x-coordinate)
-          x = x.right;
-        }
+        // cannot be equals at this point
+        // go right if x or y coordinate is equal or larger (handles "degenerate" cases:
+        // e.g. when all points have the same x-coordinate)
+        x = x.right;
       }
+      useXCoordinate = !useXCoordinate;
     }
-    return x != null;
+    return false;
   }
 
   /**
@@ -97,14 +93,14 @@ public class KdTree {
    * All points that are inside the rectangle (rectangle must be contained within unit square).
    */
   public Iterable<Point2D> range(RectHV rect) {
-    if (!BOUNDARY.contains(new Point2D(rect.xmin(), rect.ymin()))
-        || !BOUNDARY.contains(new Point2D(rect.xmax(), rect.ymax()))) {
-      throw new IllegalArgumentException("rectangle must be contained within unit square");
-    }
+
+    assert (BOUNDARY.contains(new Point2D(rect.xmin(), rect.ymin()))
+        && BOUNDARY.contains(new Point2D(rect.xmax(), rect.ymax())));
 
     List<Point2D> pointsInside = new ArrayList<Point2D>();
     range(root, rect, pointsInside, true, BOUNDARY);
     return pointsInside;
+
   }
 
   /**
@@ -156,15 +152,13 @@ public class KdTree {
     }
     if (cmp < 0) { // go left if x or y coordinate is smaller
       x.left = insert(x.left, point2D, !useXCoordinate);
-    } else { 
-      if (x.point2D.equals(point2D)) {
-        x.point2D = point2D; // overwrite if points are the same
-      } else {
+    } else {
+      if (!x.point2D.equals(point2D)) {
         // go right if x or y coordinate is equal or larger (handles "degenerate" cases:
         // e.g. when all points have the same x-coordinate)
         x.right = insert(x.right, point2D, !useXCoordinate);
       }
-    } 
+    }
     x.count = 1 + size(x.left) + size(x.right); // update count
     return x;
   }
@@ -202,12 +196,10 @@ public class KdTree {
     RectHV rectLeftBottom; // left or bottom rect
     RectHV rectRightTop; // right or top rect
     if (useXCoordinate) {
-      rectLeftBottom =
-          new RectHV(boundary.xmin(), boundary.ymin(), x.point2D.x(), boundary.ymax());
+      rectLeftBottom = new RectHV(boundary.xmin(), boundary.ymin(), x.point2D.x(), boundary.ymax());
       rectRightTop = new RectHV(x.point2D.x(), boundary.ymin(), boundary.xmax(), boundary.ymax());
     } else {
-      rectLeftBottom =
-          new RectHV(boundary.xmin(), boundary.ymin(), boundary.xmax(), x.point2D.y());
+      rectLeftBottom = new RectHV(boundary.xmin(), boundary.ymin(), boundary.xmax(), x.point2D.y());
       rectRightTop = new RectHV(boundary.xmin(), x.point2D.y(), boundary.xmax(), boundary.ymax());
     }
 
@@ -258,13 +250,11 @@ public class KdTree {
       if (useXCoordinate) {
         rectLeftBottom =
             new RectHV(boundary.xmin(), boundary.ymin(), x.point2D.x(), boundary.ymax());
-        rectRightTop =
-            new RectHV(x.point2D.x(), boundary.ymin(), boundary.xmax(), boundary.ymax());
+        rectRightTop = new RectHV(x.point2D.x(), boundary.ymin(), boundary.xmax(), boundary.ymax());
       } else {
         rectLeftBottom =
             new RectHV(boundary.xmin(), boundary.ymin(), boundary.xmax(), x.point2D.y());
-        rectRightTop =
-            new RectHV(boundary.xmin(), x.point2D.y(), boundary.xmax(), boundary.ymax());
+        rectRightTop = new RectHV(boundary.xmin(), x.point2D.y(), boundary.xmax(), boundary.ymax());
       }
 
       // ----- [] Optimization: no need to search subtree if the closest point discovered so far is
@@ -303,17 +293,17 @@ public class KdTree {
         }
 
       } else {
-        
+
         if (searchLeft) {
           findNearest(x.left, rectLeftBottom, !useXCoordinate);
         } else if (searchRight) {
           findNearest(x.right, rectRightTop, !useXCoordinate);
         }
-        
+
       }
 
     }
 
   }
-  
+
 }
