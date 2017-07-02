@@ -4,22 +4,22 @@ Compilation:  PASSED
 API:          PASSED
 
 Findbugs:     PASSED
-PMD:          PASSED
+PMD:          FAILED (1 warning)
 Checkstyle:   PASSED
 
-Correctness:  23/27 tests passed
+Correctness:  27/27 tests passed
 Memory:       8/8 tests passed
 Timing:       34/42 tests passed
 
-Aggregate score: 87.30%
+Aggregate score: 96.19%
 [Compilation: 5%, API: 5%, Findbugs: 0%, PMD: 0%, Checkstyle: 0%, Correctness: 60%, Memory: 10%, Timing: 20%]
 
 ASSESSMENT DETAILS
 
 The following files were submitted:
 ----------------------------------
-8.8K Jul  2 04:39 KdTree.java
-2.2K Jul  2 04:39 PointSET.java
+8.4K Jul  2 06:40 KdTree.java
+2.2K Jul  2 06:40 PointSET.java
 
 
 ********************************************************************************
@@ -59,6 +59,8 @@ KdTree:
 
 % pmd *.java
 *-----------------------------------------------------------
+KdTree.java:119: The private instance (or static) variable 'point2D' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+PMD ends with 1 warning.
 
 
 ================================================================
@@ -221,53 +223,26 @@ Test 3a: Insert n non-degenerate points and call contains() with random query po
   * 50000 random non-degenerate points in a 65536-by-65536 grid
   * 5000 random non-degenerate points in a 8192-by-8192 grid
   * 500 random non-degenerate points in a 1024-by-1024 grid
-    - failed on trial 449 of 500
-    - student   contains() = false
-    - reference contains() = true
   * 50 random non-degenerate points in a 128-by-128 grid
   * 5 random non-degenerate points in a 16-by-16 grid
   * 1 random non-degenerate points in a 1-by-1 grid
-==> FAILED
+==> passed
 
 Test 3b: Insert n distinct points and call contains() with random query points
   * 100000 random distinct points in a 65536-by-65536 grid
   * 100000 random distinct points in a 8192-by-8192 grid
-    - failed on trial 50 of 100000
-    - student   contains() = false
-    - reference contains() = true
   * 100000 random distinct points in a 1024-by-1024 grid
-    - failed on trial 8 of 100000
-    - student   contains() = false
-    - reference contains() = true
   * 10000 random distinct points in a 128-by-128 grid
-    - failed on trial 1 of 10000
-    - student   contains() = false
-    - reference contains() = true
   * 100 random distinct points in a 16-by-16 grid
-    - failed on trial 2 of 100
-    - student   contains() = false
-    - reference contains() = true
   * 1 random distinct points in a 1-by-1 grid
-==> FAILED
+==> passed
 
 Test 3c: Insert n general points and call contains() with random query points
   * 10000 random general points in a 1024-by-1024 grid
-    - failed on trial 35 of 10000
-    - student   contains() = false
-    - reference contains() = true
   * 10000 random general points in a 128-by-128 grid
-    - failed on trial 3 of 10000
-    - student   contains() = false
-    - reference contains() = true
   * 10000 random general points in a 16-by-16 grid
-    - failed on trial 1 of 10000
-    - student   contains() = false
-    - reference contains() = true
   * 10000 random general points in a 1-by-1 grid
-    - failed on trial 4 of 10000
-    - student   contains() = false
-    - reference contains() = true
-==> FAILED
+==> passed
 
 Test 4: Test whether two KdTree objects can be created at the same time
 ==> passed
@@ -369,25 +344,13 @@ Test 7c: Intermixed sequence of calls to insert(), isEmpty(), size(),
     and probabilities (0.3, 0.05, 0.05, 0.2, 0.2, 0.2)
   * 20000 calls with general points in a 1024-by-1024 grid
     and probabilities (0.3, 0.05, 0.05, 0.2, 0.2, 0.2)
-    - failed on trial 2429 of 20000
-    - student   contains() = false
-    - reference contains() = true
-
   * 20000 calls with general points in a 128-by-128 grid
     and probabilities (0.3, 0.05, 0.05, 0.2, 0.2, 0.2)
-    - failed on trial 941 of 20000
-    - student   contains() = false
-    - reference contains() = true
-
   * 20000 calls with general points in a 16-by-16 grid
     and probabilities (0.3, 0.05, 0.05, 0.2, 0.2, 0.2)
-    - failed on trial 106 of 20000
-    - student   contains() = false
-    - reference contains() = true
-
   * 20000 calls with general points in a 1-by-1 grid
     and probabilities (0.3, 0.05, 0.05, 0.2, 0.2, 0.2)
-==> FAILED
+==> passed
 
 Test 8: Intermixed sequence of calls to insert(), isEmpty(), size(),
         contains(), range(), and nearest() with probabilities
@@ -406,7 +369,7 @@ Test 8: Intermixed sequence of calls to insert(), isEmpty(), size(),
 ==> passed
 
 
-Total: 15/19 tests passed!
+Total: 19/19 tests passed!
 
 
 ================================================================
@@ -468,38 +431,38 @@ Inserting n points into a PointSET
 
                n      ops per second
 ----------------------------------------
-=> passed   160000    1389719         
-=> passed   320000    1467055         
-=> passed   640000    1181605         
-=> passed  1280000     983713         
+=> passed   160000    1355761         
+=> passed   320000    1454213         
+=> passed   640000    1120595         
+=> passed  1280000     911607         
 ==> 4/4 tests passed
 
 Performing contains() queries after inserting n points into a PointSET
 
                n      ops per second
 ----------------------------------------
-=> passed   160000     509802         
-=> passed   320000     483267         
-=> passed   640000     403468         
-=> passed  1280000     350871         
+=> passed   160000     508001         
+=> passed   320000     483585         
+=> passed   640000     414866         
+=> passed  1280000     367828         
 ==> 4/4 tests passed
 
 Performing range() queries after inserting n points into a PointSET
 
                n      ops per second
 ----------------------------------------
-=> passed    10000       4589         
-=> passed    20000       1882         
-=> passed    40000        861         
+=> passed    10000       3944         
+=> passed    20000       2195         
+=> passed    40000        867         
 ==> 3/3 tests passed
 
 Performing nearest() queries after inserting n points into a PointSET
 
                n      ops per second
 ----------------------------------------
-=> passed    10000       4872         
-=> passed    20000       2285         
-=> passed    40000       1010         
+=> passed    10000       4920         
+=> passed    20000       2302         
+=> passed    40000       1014         
 ==> 3/3 tests passed
 
 Total: 14/14 tests passed!
@@ -520,10 +483,10 @@ Test 1a-d: Insert n points into a 2d tree. The table gives the average number of
                                                                                                 Point2D
                n      ops per second       RectHV()           x()               y()             equals()
 ----------------------------------------------------------------------------------------------------------------
-=> passed   160000    1341038               0.0              24.1              23.1              10.7         
-=> passed   320000    1411204               0.0              24.5              23.5              11.3         
-=> passed   640000    1055526               0.0              26.0              25.0              12.6         
-=> passed  1280000     771122               0.0              28.1              27.1              12.8         
+=> passed   160000    1390595               0.0              22.1              21.1              10.7         
+=> passed   320000    1543777               0.0              22.5              21.5              11.3         
+=> passed   640000    1142159               0.0              24.0              23.0              12.6         
+=> passed  1280000     849108               0.0              26.1              25.1              12.8         
 ==> 4/4 tests passed
 
 
@@ -533,14 +496,14 @@ Test 2a-h: Perform contains() queries after inserting n points into a 2d tree. T
                                                                                Point2D
                n      ops per second       x()               y()               equals()
 -----------------------------------------------------------------------------------------------
-=> passed    10000     598481              29.5               2.0               6.8         
-=> passed    20000     651780              27.8               2.0               6.0         
-=> passed    40000     651477              32.2               2.0               6.6         
-=> passed    80000     634557              30.8               2.0               7.1         
-=> passed   160000     639344              32.8               2.0               7.1         
-=> passed   320000     625032              37.4               2.0               8.5         
-=> passed   640000     601468              37.5               2.0               9.2         
-=> passed  1280000     577552              40.2               2.0               9.1         
+=> passed    10000     536078              18.5              17.5              18.0         
+=> passed    20000     543703              19.7              18.7              19.2         
+=> passed    40000     536812              21.8              20.8              21.3         
+=> passed    80000     544789              22.0              21.0              21.5         
+=> passed   160000     467189              23.2              22.2              22.7         
+=> passed   320000     449500              25.0              24.0              24.5         
+=> passed   640000     374588              25.7              24.7              25.2         
+=> passed  1280000     314833              27.2              26.2              26.7         
 ==> 8/8 tests passed
 
 
@@ -549,14 +512,14 @@ Test 3a-h: Perform range() queries after inserting n points into a 2d tree. The 
 
                n      ops per second       intersects()      contains()        x()               y()
 ---------------------------------------------------------------------------------------------------------------
-=> passed    10000     262281              62.3              33.1              85.9              46.5         
-=> passed    20000     277321              65.1              34.6              89.9              52.8         
-=> passed    40000     252562              78.6              41.3             107.2              56.7         
-=> passed    80000     220323              81.3              42.7             110.5              59.0         
-=> passed   160000     201889              85.0              44.5             117.1              67.2         
-=> passed   320000     166821              80.5              42.2             109.7              59.7         
-=> passed   640000     121553              86.6              45.3             117.8              66.6         
-=> passed  1280000     164408              94.1              49.0             127.0              64.1         
+=> passed    10000     265278              62.3              31.1              81.9              42.5         
+=> passed    20000     282777              65.1              32.6              85.9              48.8         
+=> passed    40000     254708              78.6              39.3             103.2              52.7         
+=> passed    80000     228581              81.3              40.7             106.5              55.0         
+=> passed   160000     186590              85.0              42.5             113.1              63.2         
+=> passed   320000     137793              80.5              40.2             105.7              55.7         
+=> passed   640000     167163              86.6              43.3             113.8              62.6         
+=> passed  1280000     119411              94.1              47.0             123.0              60.1         
 ==> 8/8 tests passed
 
 
@@ -566,14 +529,14 @@ Test 4a-h: Perform nearest() queries after inserting n points into a 2d tree. Th
                                          Point2D                 RectHV
                n      ops per second     distanceSquaredTo()     distanceSquaredTo()        x()               y()
 ------------------------------------------------------------------------------------------------------------------------
-=> FAILED    10000    48252                 260.8                  519.5   (1.7x)         1639.3   (2.0x)   1619.3   (2.0x)
-=> FAILED    20000    39342                 351.1                  700.2   (2.3x)         2122.1   (2.7x)   2108.1   (2.6x)
-=> FAILED    40000    24813   (0.8x)        546.9                 1091.8   (3.6x)         3593.4   (4.5x)   3339.6   (4.2x)
-=> FAILED    80000    18422   (0.6x)        719.4   (1.2x)        1436.9   (4.8x)         4653.3   (5.8x)   4508.2   (5.6x)
-=> FAILED   160000    15636   (0.5x)        849.6   (1.4x)        1697.3   (5.7x)         5241.8   (6.6x)   5074.1   (6.3x)
-=> FAILED   320000    11817   (0.6x)       1053.4   (1.8x)        2104.7   (7.0x)         6682.9   (8.4x)   6539.2   (8.2x)
-=> FAILED   640000     4751   (0.2x)       1678.5   (2.8x)        3355.1  (11.2x)        10491.4  (13.1x)  10573.8  (13.2x)
-=> FAILED  1280000     6605   (0.3x)       1789.1   (3.0x)        3576.3  (11.9x)        11302.4  (14.1x)  11328.7  (14.2x)
+=> FAILED    10000    49147                 260.8                  519.5   (1.7x)         1639.3   (2.0x)   1619.3   (2.0x)
+=> FAILED    20000    39142                 351.1                  700.2   (2.3x)         2122.1   (2.7x)   2108.1   (2.6x)
+=> FAILED    40000    24626   (0.8x)        547.0                 1091.9   (3.6x)         3593.7   (4.5x)   3340.0   (4.2x)
+=> FAILED    80000    20166   (0.7x)        646.3   (1.1x)        1290.7   (4.3x)         4018.9   (5.0x)   3973.4   (5.0x)
+=> FAILED   160000    14961   (0.5x)        859.6   (1.4x)        1717.3   (5.7x)         5394.4   (6.7x)   5281.3   (6.6x)
+=> FAILED   320000     7383   (0.4x)       1100.9   (1.8x)        2199.7   (7.3x)         7074.3   (8.8x)   6739.4   (8.4x)
+=> FAILED   640000     8589   (0.4x)       1400.0   (2.3x)        2798.1   (9.3x)         9103.7  (11.4x)   8616.6  (10.8x)
+=> FAILED  1280000     4353   (0.2x)       2461.1   (4.1x)        4920.3  (16.4x)        16433.4  (20.5x)  15423.1  (19.3x)
 ==> 0/8 tests passed
 
 
