@@ -129,10 +129,35 @@ public class TestKdTree {
   public void test_nearest_empty() {
     Assert.assertNull(kdTree.nearest(new Point2D(-5.0, 5.0)));
   }
+  
+  // ----- [] Test with sample inputs
 
   @Test
-  public void test_nearest1() {
+  public void test_nearest_circle10() {
     Assert.assertEquals(new Point2D(0.793893, 0.904508), kdTree_10.nearest(new Point2D(1.0, 1.0)));
+  }
+  
+  @Test
+  public void test_size_circle10() {
+    Assert.assertEquals(10, kdTree_10.size());
+  }
+
+  @Test
+  public void test_size_circle100() {
+    KdTree kdTree_100 = readInputFile("src/searchtrees/kdtrees/circle100.txt");
+    Assert.assertEquals(100, kdTree_100.size());
+  }
+
+  @Test
+  public void test_size_circle1000() {
+    KdTree kdTree_1000 = readInputFile("src/searchtrees/kdtrees/circle1000.txt");
+    Assert.assertEquals(1000, kdTree_1000.size());
+  }
+
+  @Test
+  public void test_size_circle10k() {
+    KdTree kdTree_10k = readInputFile("src/searchtrees/kdtrees/circle10k.txt");
+    Assert.assertEquals(11, kdTree_10k.size());
   }
 
   private KdTree readInputFile(String filename) {
