@@ -156,12 +156,16 @@ public class KdTree {
     }
     if (cmp < 0) { // go left if x or y coordinate is smaller
       RectHV rectLeftBottom; // left or bottom rect
-      if (useXCoordinate) {
-        rectLeftBottom = new RectHV(containerRect.xmin(), containerRect.ymin(), x.point2D.x(),
-            containerRect.ymax());
+      if (x.left != null) {
+        rectLeftBottom = x.left.rect; 
       } else {
-        rectLeftBottom = new RectHV(containerRect.xmin(), containerRect.ymin(),
-            containerRect.xmax(), x.point2D.y());
+        if (useXCoordinate) {
+          rectLeftBottom = new RectHV(containerRect.xmin(), containerRect.ymin(), x.point2D.x(),
+              containerRect.ymax());
+        } else {
+          rectLeftBottom = new RectHV(containerRect.xmin(), containerRect.ymin(),
+              containerRect.xmax(), x.point2D.y());
+        }
       }
       x.left = insert(x.left, point2D, !useXCoordinate, rectLeftBottom);
     } else {
@@ -169,12 +173,16 @@ public class KdTree {
         // go right if x or y coordinate is equal or larger (handles "degenerate" cases:
         // e.g. when all points have the same x-coordinate)
         RectHV rectRightTop; // right or top rect
-        if (useXCoordinate) {
-          rectRightTop = new RectHV(x.point2D.x(), containerRect.ymin(), containerRect.xmax(),
-              containerRect.ymax());
+        if (x.right != null) {
+          rectRightTop = x.right.rect;
         } else {
-          rectRightTop = new RectHV(containerRect.xmin(), x.point2D.y(), containerRect.xmax(),
-              containerRect.ymax());
+          if (useXCoordinate) {
+            rectRightTop = new RectHV(x.point2D.x(), containerRect.ymin(), containerRect.xmax(),
+                containerRect.ymax());
+          } else {
+            rectRightTop = new RectHV(containerRect.xmin(), x.point2D.y(), containerRect.xmax(),
+                containerRect.ymax());
+          }
         }
         x.right = insert(x.right, point2D, !useXCoordinate, rectRightTop);
       }
