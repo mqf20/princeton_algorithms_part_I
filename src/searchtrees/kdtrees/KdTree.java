@@ -122,8 +122,8 @@ public class KdTree {
     private final Point2D point2D;
     private Node left, right;
     private int count;
-    private RectHV rect; // the axis-aligned rectangle corresponding to this node for efficient
-                         // range search and nearest neighbor search
+    private final RectHV rect; // the axis-aligned rectangle corresponding to this node for efficient
+                               // range search and nearest neighbor search
 
     public Node(Point2D point2D, int count, RectHV rect) {
       this.point2D = point2D;
@@ -249,64 +249,38 @@ public class KdTree {
      */
     private void findNearest(Node queryPoint, boolean useXCoordinate) {
 
-      assert (queryPoint != null);
-
-//      System.out.println(">> querying " + queryPoint.point2D);
+      if (queryPoint == null) {
+        return;
+      }
 
       // ----- [] Update closest point and distance
 
       double currentDist = queryPoint.point2D.distanceSquaredTo(p);
+      
+      // ----- [] Optimization: no need to search subtree if the closest point discovered so far is
+      // closer than the distance between p and the rectangle corresponding to child of queryPoint.
+
+      if (queryPoint.rect.distanceSquaredTo(p) >= nearestDistance) {
+        return;
+      } 
+
       if (currentDist < nearestDistance) {
         nearestNodeSoFar = queryPoint;
         nearestDistance = currentDist;
       }
 
-      // ----- [] Optimization: no need to search subtree if the closest point discovered so far is
-      // closer than the distance between p and the rectangle corresponding to child of queryPoint.
+      // ----- [] Optimization: if we have to search both subtrees, search the one that is on the
+      // same side of the splitting line as p first.
 
-      boolean searchLeft = false;
-      boolean searchRight = false;
-
-      if (queryPoint.left != null && queryPoint.left.rect.distanceSquaredTo(p) < nearestDistance) {
-        // search left subtree
-        searchLeft = true;
-      } else if (queryPoint.left != null) {
-//        System.out.println(">> skipping left subtree of " + queryPoint.point2D);
-      }
-
-      if (queryPoint.right != null && queryPoint.right.rect.distanceSquaredTo(p) < nearestDistance) {
-        // search right subtree
-        searchRight = true;
-      } else if (queryPoint.right != null) {
-//        System.out.println(">> skipping right subtree of " + queryPoint.point2D);
-      }
-
-      if (searchLeft && searchRight) {
-
-        // ----- [] Optimization: if we have to search both subtrees, search the one that is on the
-        // same side of the splitting line as p first.
-
-        if ((useXCoordinate && (queryPoint.point2D.x() < p.x()))
-            || (!useXCoordinate && (queryPoint.point2D.y() < p.y()))) {
-//          System.out.println(">> optimize and go right");
-          // use right or top side of splitting line first
-          findNearest(queryPoint.right, !useXCoordinate); // order is important
-          findNearest(queryPoint.left, !useXCoordinate);
-        } else {
-//          System.out.println(">> optimize and go left");
-          // use left or bottom side of splitting line first
-          findNearest(queryPoint.left, !useXCoordinate); // order is important
-          findNearest(queryPoint.right, !useXCoordinate);
-        }
-
+      if ((useXCoordinate && (queryPoint.point2D.x() < p.x()))
+          || (!useXCoordinate && (queryPoint.point2D.y() < p.y()))) {
+        // use right or top side of splitting line first
+        findNearest(queryPoint.right, !useXCoordinate); // order is important
+        findNearest(queryPoint.left, !useXCoordinate);
       } else {
-
-        if (searchLeft) {
-          findNearest(queryPoint.left, !useXCoordinate);
-        } else if (searchRight) {
-          findNearest(queryPoint.right, !useXCoordinate);
-        }
-
+        // use left or bottom side of splitting line first
+        findNearest(queryPoint.left, !useXCoordinate); // order is important
+        findNearest(queryPoint.right, !useXCoordinate);
       }
 
     }
