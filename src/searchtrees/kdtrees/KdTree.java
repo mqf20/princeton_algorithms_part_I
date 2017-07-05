@@ -3,6 +3,7 @@ package searchtrees.kdtrees;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 
@@ -248,9 +249,9 @@ public class KdTree {
      */
     private void findNearest(Node queryPoint, boolean useXCoordinate) {
 
-      if (queryPoint == null) {
-        return;
-      }
+      assert (queryPoint != null);
+
+//      System.out.println(">> querying " + queryPoint.point2D);
 
       // ----- [] Update closest point and distance
 
@@ -269,11 +270,15 @@ public class KdTree {
       if (queryPoint.left != null && queryPoint.left.rect.distanceSquaredTo(p) < nearestDistance) {
         // search left subtree
         searchLeft = true;
+      } else if (queryPoint.left != null) {
+//        System.out.println(">> skipping left subtree of " + queryPoint.point2D);
       }
 
       if (queryPoint.right != null && queryPoint.right.rect.distanceSquaredTo(p) < nearestDistance) {
         // search right subtree
         searchRight = true;
+      } else if (queryPoint.right != null) {
+//        System.out.println(">> skipping right subtree of " + queryPoint.point2D);
       }
 
       if (searchLeft && searchRight) {
@@ -283,13 +288,15 @@ public class KdTree {
 
         if ((useXCoordinate && (queryPoint.point2D.x() < p.x()))
             || (!useXCoordinate && (queryPoint.point2D.y() < p.y()))) {
-          // use left or bottom side of splitting line first
-          findNearest(queryPoint.left, !useXCoordinate); // order is important
-          findNearest(queryPoint.right, !useXCoordinate);
-        } else {
+//          System.out.println(">> optimize and go right");
           // use right or top side of splitting line first
           findNearest(queryPoint.right, !useXCoordinate); // order is important
           findNearest(queryPoint.left, !useXCoordinate);
+        } else {
+//          System.out.println(">> optimize and go left");
+          // use left or bottom side of splitting line first
+          findNearest(queryPoint.left, !useXCoordinate); // order is important
+          findNearest(queryPoint.right, !useXCoordinate);
         }
 
       } else {
@@ -304,6 +311,20 @@ public class KdTree {
 
     }
 
+  }
+  
+  public static void main(String[] args) {
+    In in = new In("src/searchtrees/kdtrees/circle10.txt");
+    // initialize the data structures with N points from standard input
+    KdTree kdTree = new KdTree();
+    while (!in.isEmpty()) {
+      double x = in.readDouble();
+      double y = in.readDouble();
+      Point2D p = new Point2D(x, y);
+      kdTree.insert(p);
+    }
+    Point2D p = new Point2D(0.81, 0.30);
+    System.out.println(">> closest point to " + p + " is " + kdTree.nearest(p));
   }
 
 }
